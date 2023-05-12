@@ -1,0 +1,35 @@
+version: '1.0'
+
+services:
+  keycloak:
+    image: jboss/keycloak:15.0.2
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: keycloak-db
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      KEYCLOAK_IMPORT: /tmp/myrealm.json
+      KEYCLOAK_FRONTEND_URL: http://localhost:8080/auth
+      REALM_NAME: myrealm
+      CLIENT_ID: myclient
+    ports:
+      - 8080:8080
+    volumes:
+      - ./myrealm.json:/tmp/myrealm.json
+    depends_on:
+      - keycloak-db
+
+  keycloak-db:
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
+
+volumes:
+  keycloak-db-data:

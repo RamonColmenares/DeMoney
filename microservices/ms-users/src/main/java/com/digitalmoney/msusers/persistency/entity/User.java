@@ -1,12 +1,13 @@
 package com.digitalmoney.msusers.persistency.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Entity(name = "users")
+@Entity(name = "users") @Data
 public class User {
 
     @Id
