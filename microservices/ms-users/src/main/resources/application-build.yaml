@@ -1,0 +1,26 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:testdb}
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+keycloak:
+  url:
+  auth-server-url:
+  realm:
+  resource:
+  username:
+  password:
+  credentials:
+    secret: none
+
+
+logging:
+  level:
+    com:
+      digitalmoney=DEBUG:

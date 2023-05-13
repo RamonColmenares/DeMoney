@@ -12,15 +12,18 @@ services:
       KEYCLOAK_USER: ${KEYCLOAK_USER}
       KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
       KEYCLOAK_IMPORT: /tmp/myrealm.json
-      KEYCLOAK_FRONTEND_URL: http://localhost:8080/auth
+      KEYCLOAK_FRONTEND_URL: http://localhost:8081/auth
       REALM_NAME: myrealm
       CLIENT_ID: myclient
-    ports:
-      - 8080:8080
     volumes:
       - ./myrealm.json:/tmp/myrealm.json
+    ports:
+      - 8081:8081
+    command: ["-Djboss.http.port=8100"]
     depends_on:
       - keycloak-db
+    networks:
+      - ms-users
 
   keycloak-db:
     image: postgres:13.3
@@ -32,4 +35,8 @@ services:
       - keycloak-db-data:/var/lib/postgresql/data
 
 volumes:
-  keycloak-db-data:
+  keycloak-db-data: {}
+
+networks:
+  ms-users:
+    driver: bridge
