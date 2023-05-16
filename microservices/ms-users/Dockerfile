@@ -6,8 +6,9 @@ WORKDIR /app
 # Copy the source code into the container
 COPY . /app
 
+
 # Build the application
-RUN mvn -Pbuild package
+RUN mvn package
 
 # Expose the port that the Spring Boot application listens on
 EXPOSE 8080

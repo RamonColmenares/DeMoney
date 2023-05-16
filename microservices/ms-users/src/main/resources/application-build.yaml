@@ -9,15 +9,21 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+
 keycloak:
   url:
-  auth-server-url:
-  realm:
+  auth-server-url: localhost:8080
+  realm: master
   resource:
   username:
   password:
-  credentials:
-    secret: none
+
+app:
+  keycloak:
+    client-id:
+    client-secret:
+    login:
+      url:
 
 
 logging:

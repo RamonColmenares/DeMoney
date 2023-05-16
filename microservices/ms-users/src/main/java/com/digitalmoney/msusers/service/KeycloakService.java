@@ -1,63 +1,50 @@
 package com.digitalmoney.msusers.service;
 
 import com.digitalmoney.msusers.persistency.entity.User;
+import lombok.AllArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
-@Service
+import static java.util.Collections.singletonList;
+
+@Service @AllArgsConstructor
 public class KeycloakService {
 
-    @Value("${keycloak.credentials.secret}")
-    private String secretKey;
+    private final Keycloak connection;
 
-    @Value("${keycloak.resource}")
-    private String clientId;
 
-    @Value("${keycloak.auth-server-url}")
-    private String authUrl;
 
-    @Value("${keycloak.realm}")
-    private String realm;
+    public Response createInKeycloak(User user) {
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setValue(user.getPassword());
+        credential.setTemporary(false);
 
-    @Value("${keycloak.url}")
-    private String keycloakUrl;
+        UserRepresentation userDB = new UserRepresentation();
+        userDB.setEnabled(true);
+        userDB.setUsername(user.getEmail());
+        userDB.setFirstName(user.getFirstName());
+        userDB.setLastName(user.getLastName());
+        userDB.setEmail(user.getEmail());
+        userDB.setCredentials(singletonList(credential));
+        userDB.setRealmRoles(singletonList("user"));
 
-    @Value("${keycloak.username}")
-    private String username;
 
-    @Value("${keycloak.password}")
-    private String password;
-    public void createInKeycloak(User user) {
-        Keycloak keycloak = KeycloakBuilder.builder()
-                .serverUrl(keycloakUrl)
-                .realm("master") // usually it's master
-                .clientId(clientId)
-                .clientSecret(secretKey)
-                .username(username) // provide admin username
-                .password(password) // provide admin password
-                .build();
+        return connection.realm("Master").users().create(userDB);
+    }
 
-        UserRepresentation userRepresentation = new UserRepresentation();
-        userRepresentation.setEnabled(true);
-        userRepresentation.setUsername(user.getEmail());
-        userRepresentation.setFirstName(user.getFirstName());
-        userRepresentation.setLastName(user.getLastName());
-        userRepresentation.setEmail(user.getEmail());
 
-        // Set user password
-        CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-        credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
-        credentialRepresentation.setValue(user.getPassword()); // it should be plain text
+    public List<UserRepresentation> test() {
+        return connection.realm("Master").users().search("admin");
+    }
 
-        userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
+    public Integer findAll() {
+        return 2;
 
-        // Create user (requires manage-users role)
-        keycloak.realm(realm).users().create(userRepresentation);
     }
 }

@@ -10,13 +10,13 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://users_db:3306/users
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      KEYCLOAK_URL: http://keycloak:8081/auth
-      KEYCLOAK_REALM: myrealm
-      KEYCLOAK_RESOURCE: myclient
+      KEYCLOAK_URL: http://keycloak:8100
+      KEYCLOAK_RESOURCE: admin-cli
       KEYCLOAK_CREDENTIALS_SECRET: ${KEYCLOAK_SECRET}
       KEYCLOAK_USERNAME: ${KEYCLOAK_USER}
       KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
       SPRING_PROFILES_ACTIVE: prod
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
     networks:
       - ms-users
     depends_on:

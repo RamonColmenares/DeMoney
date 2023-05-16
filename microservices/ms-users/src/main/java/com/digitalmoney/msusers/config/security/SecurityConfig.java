@@ -21,6 +21,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.GET, "/ping").permitAll()
                         .requestMatchers(HttpMethod.GET, "/test-db").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/test-keycloak").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

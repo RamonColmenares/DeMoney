@@ -16,11 +16,14 @@ spring:
 
 keycloak:
   url: ${KEYCLOAK_URL}
-  auth-server-url: ${KEYCLOAK_URL}
+  auth-server-url: ${keycloak.url}/auth
   realm: ${KEYCLOAK_REALM}
   resource: ${KEYCLOAK_RESOURCE}
-  credentials:
-    secret: ${KEYCLOAK_CREDENTIALS_SECRET}
   username: ${KEYCLOAK_USERNAME}
   password: ${KEYCLOAK_PASSWORD}
 
+app:
+  keycloak:
+    client-id: ${keycloak.resource}
+    client-secret: ${KEYCLOAK_CREDENTIALS_SECRET}
+    login.url: ${keycloak.url}/auth/realms/demo/protocol/openid-connect/token
