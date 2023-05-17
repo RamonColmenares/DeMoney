@@ -1,5 +1,6 @@
 package com.digitalmoney.msusers.service;
 
+import com.digitalmoney.msusers.config.beans.KeycloakConnectionManager;
 import com.digitalmoney.msusers.persistency.entity.User;
 import lombok.AllArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
@@ -14,10 +15,7 @@ import static java.util.Collections.singletonList;
 
 @Service @AllArgsConstructor
 public class KeycloakService {
-
-    private final Keycloak connection;
-
-
+    private final KeycloakConnectionManager keycloakConnectionManager;
 
     public Response createInKeycloak(User user) {
         CredentialRepresentation credential = new CredentialRepresentation();
@@ -35,16 +33,11 @@ public class KeycloakService {
         userDB.setRealmRoles(singletonList("user"));
 
 
-        return connection.realm("Master").users().create(userDB);
+        return keycloakConnectionManager.getConnectionAdmin().realm("Master").users().create(userDB);
     }
 
 
     public List<UserRepresentation> test() {
-        return connection.realm("Master").users().search("admin");
-    }
-
-    public Integer findAll() {
-        return 2;
-
+        return keycloakConnectionManager.getConnectionAdmin().realm("Master").users().search("admin");
     }
 }
