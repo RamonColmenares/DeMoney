@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
+import org.keycloak.representations.AccessTokenResponse;
 
 @Service @AllArgsConstructor
 public class KeycloakService {
@@ -39,5 +40,15 @@ public class KeycloakService {
 
     public List<UserRepresentation> test() {
         return keycloakConnectionManager.getConnectionAdmin().realm("Master").users().search("admin");
+    }
+    
+    public String userLogin(String username, String password){
+	AccessTokenResponse kToken;
+	try {
+	    kToken = keycloakConnectionManager.getConnectionUser(username, password);
+	    return kToken.getToken();
+	} catch (Exception e) {
+	    return null;
+	}
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.ws.rs.core.Response;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @RestController
@@ -45,7 +46,15 @@ public class UserController {
             e.printStackTrace();
         }
         return null;
-
+    }
+    
+    @GetMapping("/login")
+    public ResponseEntity<?> login(@RequestBody @Valid User user) {
+	String token = keycloakService.userLogin("", user.getPassword());
+	if (token == null) {
+	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+	}
+	return ResponseEntity.ok(token);
     }
 
 }
