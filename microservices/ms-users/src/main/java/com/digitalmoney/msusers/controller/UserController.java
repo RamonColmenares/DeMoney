@@ -1,5 +1,7 @@
 package com.digitalmoney.msusers.controller;
 
+import com.digitalmoney.msusers.application.dto.UserLoginDTO;
+import com.digitalmoney.msusers.application.dto.UserLoginResponseDTO;
 import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
 import com.digitalmoney.msusers.persistency.entity.User;
 import com.digitalmoney.msusers.service.KeycloakService;
@@ -14,6 +16,7 @@ import javax.ws.rs.core.Response;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @RestController
@@ -54,6 +57,15 @@ public class UserController {
             keycloakService.removeFromKeycloak(user);
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody @Valid UserLoginDTO user) {
+	String token = keycloakService.userLogin(user.getEmail(), user.getPassword());
+	if (token == null) {
+	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+	}
+	return ResponseEntity.ok(new UserLoginResponseDTO(token));
     }
 
 }

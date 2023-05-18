@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
+import org.keycloak.representations.AccessTokenResponse;
 
 @Service @AllArgsConstructor @Log4j2
 public class KeycloakService {
@@ -50,5 +51,17 @@ public class KeycloakService {
         } catch (Exception e) {
             log.error("Error deleting faulty user: ", e);
         }
+    }
+    
+    public String userLogin(String username, String password){
+	AccessTokenResponse kToken;
+	try {
+	    kToken = keycloakConnectionManager.getConnectionUser(username, password);
+	    return kToken.getToken();
+	    
+	/* MANEJAR EXCEPTIONS ACÁ */
+	} catch (Exception e) {
+	    return null;
+	}
     }
 }

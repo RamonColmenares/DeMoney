@@ -35,16 +35,24 @@ public class KeycloakConnectionManager {
                 .build();
     }
 
-    public AccessTokenResponse getConnectionUser(String username, String password) {
+    /* MANEJAR ERRORES MEJOR */
+    public AccessTokenResponse getConnectionUser(String username, String password) throws Exception {
         Keycloak keycloak = KeycloakBuilder.builder()
                 .serverUrl(keycloakAuthUrl)
-                .realm(realm) // usually it's master
+                .realm(realm)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
                 .username(username)
                 .password(password)
                 .build();
         return keycloak.tokenManager().getAccessToken();
+	
+	/* 
+	Y si no encuentra nada? 
+	    Error? throws, no catch (maneja el service)
+	    Null? retornar así
+	
+	*/
     }
 
     public Keycloak getConnectionService() {
