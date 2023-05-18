@@ -47,6 +47,8 @@ public class KeycloakService {
 	try {
 	    kToken = keycloakConnectionManager.getConnectionUser(username, password);
 	    return kToken.getToken();
+	    
+	/* MANEJAR EXCEPTIONS ACÁ */
 	} catch (Exception e) {
 	    return null;
 	}

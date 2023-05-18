@@ -48,7 +48,7 @@ public class UserController {
         return null;
     }
     
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid User user) {
 	String token = keycloakService.userLogin("", user.getPassword());
 	if (token == null) {
