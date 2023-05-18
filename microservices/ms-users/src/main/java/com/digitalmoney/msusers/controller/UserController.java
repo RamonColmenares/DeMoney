@@ -56,4 +56,17 @@ public class UserController {
         }
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authorization) {
+        try {
+            String token = authorization.split("Bearer ")[1];
+            keycloakService.logout(token);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
+
+    }
+
 }

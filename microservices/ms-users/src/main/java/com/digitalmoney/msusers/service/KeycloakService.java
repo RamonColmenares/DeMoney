@@ -51,4 +51,10 @@ public class KeycloakService {
             log.error("Error deleting faulty user: ", e);
         }
     }
+
+    public void logout(String token) {
+        Keycloak keycloak = keycloakConnectionManager.getConnectionWithToken(token);
+        keycloak.tokenManager().logout();
+        keycloak.close();
+    }
 }

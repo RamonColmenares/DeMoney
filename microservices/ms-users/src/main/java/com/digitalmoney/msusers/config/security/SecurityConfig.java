@@ -24,6 +24,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/test-db").permitAll()
                         .requestMatchers(HttpMethod.GET, "/test-keycloak").permitAll()
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/logout").permitAll()
                         .requestMatchers(HttpMethod.GET, "/error").permitAll()
                         .anyRequest().authenticated()
                 );

@@ -1,5 +1,6 @@
 package com.digitalmoney.msusers.config.beans;
 
+import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.AccessTokenResponse;
@@ -53,6 +54,17 @@ public class KeycloakConnectionManager {
                 .realm(realm) // usually it's master
                 .clientId(clientId)
                 .clientSecret(clientSecret)
+                .build();
+    }
+
+    public Keycloak getConnectionWithToken(String token) {
+        return KeycloakBuilder.builder()
+                .serverUrl(keycloakAuthUrl)
+                .realm(realm)
+                .grantType(OAuth2Constants.AUTHORIZATION_CODE)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .authorization(token)
                 .build();
     }
 }
