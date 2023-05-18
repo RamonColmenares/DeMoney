@@ -36,16 +36,24 @@ public class KeycloakConnectionManager {
                 .build();
     }
 
-    public AccessTokenResponse getConnectionUser(String username, String password) {
+    /* MANEJAR ERRORES MEJOR */
+    public AccessTokenResponse getConnectionUser(String username, String password) throws Exception {
         Keycloak keycloak = KeycloakBuilder.builder()
                 .serverUrl(keycloakAuthUrl)
-                .realm(realm) // usually it's master
+                .realm(realm)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
                 .username(username)
                 .password(password)
                 .build();
         return keycloak.tokenManager().getAccessToken();
+	
+	/* 
+	Y si no encuentra nada? 
+	    Error? throws, no catch (maneja el service)
+	    Null? retornar así
+	
+	*/
     }
 
     public Keycloak getConnectionService() {
@@ -57,14 +65,14 @@ public class KeycloakConnectionManager {
                 .build();
     }
 
-    public Keycloak getConnectionWithToken(String token) {
-        return KeycloakBuilder.builder()
-                .serverUrl(keycloakAuthUrl)
-                .realm(realm)
-                .grantType(OAuth2Constants.AUTHORIZATION_CODE)
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .authorization(token)
-                .build();
+    public Keycloak getConnectionWithToken() {
+        return Keycloak.getInstance(
+                keycloakAuthUrl,
+                realm, // the realm
+                null, // the username - we're not using these since we already have a token
+                null, // the password
+                clientId, // the client id
+                clientSecret // the client secret
+        );
     }
 }
