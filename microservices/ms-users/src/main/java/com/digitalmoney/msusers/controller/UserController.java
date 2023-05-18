@@ -1,5 +1,6 @@
 package com.digitalmoney.msusers.controller;
 
+import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
 import com.digitalmoney.msusers.persistency.entity.User;
 import com.digitalmoney.msusers.service.KeycloakService;
 import com.digitalmoney.msusers.service.UserService;
@@ -38,14 +39,16 @@ public class UserController {
 
     }
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid User user) {
+    public ResponseEntity<?> register(@RequestBody @Valid UserRegisterDTO user) {
         try (Response response = keycloakService.createInKeycloak(user)) {
+            if (response.getStatus() == 201) {
+                return ResponseEntity.ok().body(userService.createUser(user));
+            }
             return ResponseEntity.status(response.getStatus()).body(response.getEntity().toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-
     }
 
 }

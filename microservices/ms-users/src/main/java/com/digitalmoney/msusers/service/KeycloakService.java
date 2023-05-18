@@ -1,5 +1,6 @@
 package com.digitalmoney.msusers.service;
 
+import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
 import com.digitalmoney.msusers.config.beans.KeycloakConnectionManager;
 import com.digitalmoney.msusers.persistency.entity.User;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import static java.util.Collections.singletonList;
 public class KeycloakService {
     private final KeycloakConnectionManager keycloakConnectionManager;
 
-    public Response createInKeycloak(User user) {
+    public Response createInKeycloak(UserRegisterDTO user) {
         CredentialRepresentation credential = new CredentialRepresentation();
         credential.setType(CredentialRepresentation.PASSWORD);
         credential.setValue(user.getPassword());
@@ -33,11 +34,11 @@ public class KeycloakService {
         userDB.setRealmRoles(singletonList("user"));
 
 
-        return keycloakConnectionManager.getConnectionAdmin().realm("Master").users().create(userDB);
+        return keycloakConnectionManager.getConnectionAdmin().realm("users-bank").users().create(userDB);
     }
 
 
     public List<UserRepresentation> test() {
-        return keycloakConnectionManager.getConnectionAdmin().realm("Master").users().search("admin");
+        return keycloakConnectionManager.getConnectionAdmin().realm("users-bank").users().search("admin", true);
     }
 }

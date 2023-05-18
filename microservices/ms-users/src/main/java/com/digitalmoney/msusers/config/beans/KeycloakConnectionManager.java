@@ -27,7 +27,7 @@ public class KeycloakConnectionManager {
     public Keycloak getConnectionAdmin() {
         System.out.println(keycloakAuthUrl);
         return KeycloakBuilder.builder()
-                .serverUrl(keycloakAuthUrl)
+                .serverUrl(keycloakAuthUrl) //localhost:8080/auth
                 .realm(realm) // usually it's master
                 .clientId(clientId)
                 .clientSecret(clientSecret)
