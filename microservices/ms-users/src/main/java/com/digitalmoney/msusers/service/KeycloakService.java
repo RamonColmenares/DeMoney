@@ -4,6 +4,7 @@ import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
 import com.digitalmoney.msusers.config.beans.KeycloakConnectionManager;
 import com.digitalmoney.msusers.persistency.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import static java.util.Collections.singletonList;
 
-@Service @AllArgsConstructor
+@Service @AllArgsConstructor @Log4j2
 public class KeycloakService {
     private final KeycloakConnectionManager keycloakConnectionManager;
 
@@ -38,7 +39,16 @@ public class KeycloakService {
     }
 
 
-    public List<UserRepresentation> test() {
-        return keycloakConnectionManager.getConnectionAdmin().realm("users-bank").users().search("admin", true);
+    public List<UserRepresentation> test(String username) {
+        return keycloakConnectionManager.getConnectionAdmin().realm("users-bank").users().search(username, true);
+    }
+
+    public void removeFromKeycloak(UserRegisterDTO user) {
+        try {
+            String id = keycloakConnectionManager.getConnectionAdmin().realm("users-bank").users().search(user.getEmail(), true).get(0).getId();
+            keycloakConnectionManager.getConnectionAdmin().realm("users-bank").users().delete(id);
+        } catch (Exception e) {
+            log.error("Error deleting faulty user: ", e);
+        }
     }
 }

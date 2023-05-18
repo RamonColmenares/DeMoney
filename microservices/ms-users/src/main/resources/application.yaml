@@ -6,6 +6,6 @@ spring:
     import: optional:file:.env[.properties]
 
 
-#logging:
-#  level:
-#    root: DEBUG
+logging:
+  level:
+    root: INFO
