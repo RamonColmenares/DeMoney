@@ -1,18 +1,18 @@
 package com.digitalmoney.msusers.controller;
 
+import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
 import com.digitalmoney.msusers.persistency.entity.User;
 import com.digitalmoney.msusers.service.KeycloakService;
 import com.digitalmoney.msusers.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.Response;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.List;
 
 @AllArgsConstructor
@@ -33,19 +33,27 @@ public class UserController {
     }
 
     @GetMapping("/test-keycloak")
-    public ResponseEntity<?> testKeycloak() {
-        return ResponseEntity.ok(keycloakService.test());
+    public ResponseEntity<?> testKeycloak(@RequestParam String username) {
+        return ResponseEntity.ok(keycloakService.test(username));
 
     }
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid User user) {
+    public ResponseEntity<?> register(@RequestBody @Valid UserRegisterDTO user) {
         try (Response response = keycloakService.createInKeycloak(user)) {
-            return ResponseEntity.status(response.getStatus()).body(response.getEntity().toString());
+            if (response.getStatus() == 201) {
+                return ResponseEntity.ok().body(userService.createUser(user));
+            }
+            if (response.getStatus() == 409) {
+                return ResponseEntity.status(409).body("It seems like this email is already registered.");
+            }
+            return ResponseEntity.status(response.getStatus()).body(response.getStatusInfo());
+        } catch (DataIntegrityViolationException e) {
+            keycloakService.removeFromKeycloak(user);
+            return ResponseEntity.badRequest().body(e.getCause().getCause().getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            keycloakService.removeFromKeycloak(user);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
-        return null;
-
     }
 
 }
