@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 import org.keycloak.representations.AccessTokenResponse;
@@ -75,5 +76,10 @@ public class KeycloakService {
         Keycloak keycloak = keycloakConnectionManager.getConnectionAdmin();
         keycloak.realm("users-bank").users().get(userId).logout();
         keycloak.close();
+    }
+
+    public Object getGrants(String token) throws VerificationException {
+        AccessToken accessToken = TokenVerifier.create(token, AccessToken.class).getToken();
+        return accessToken.getRealmAccess().getRoles().stream().map(e -> "ROLE_" + e.toUpperCase()).collect(Collectors.toList());
     }
 }

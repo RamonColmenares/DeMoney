@@ -8,6 +8,7 @@ import com.digitalmoney.msusers.service.KeycloakService;
 import com.digitalmoney.msusers.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.keycloak.common.VerificationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -80,4 +81,9 @@ public class UserController {
 	return ResponseEntity.ok(new UserLoginResponseDTO(token));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getGrants(@RequestHeader("Authorization") String authorization) throws VerificationException {
+        String token = authorization.split("Bearer ")[1];
+        return ResponseEntity.ok(keycloakService.getGrants(token));
+    }
 }
