@@ -2,11 +2,6 @@ package com.digitalmoney.msusers.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
-public class UserLoginDTO {
-    @NotBlank
-    String email;
-    @NotBlank
-    String password;
-}
+public record UserLoginDTO (@NotBlank(message = "Email mustn't be empty.") String email, @NotBlank(message = "Password mustn't be empty.") String password) {}

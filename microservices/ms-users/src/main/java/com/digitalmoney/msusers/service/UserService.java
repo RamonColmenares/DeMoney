@@ -8,10 +8,19 @@ import com.digitalmoney.msusers.persistency.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.keycloak.TokenVerifier;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.common.VerificationException;
+import org.keycloak.representations.AccessToken;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -27,8 +36,8 @@ public class UserService {
          User userToStore = mapper.convertValue(user, User.class);
          BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
          userToStore.setPassword(passwordEncoder.encode(userToStore.getPassword()));
-         userToStore.setCvu(generateCVU(user.getDni()));
-         userToStore.setAlias(generateAlias(user.getDni()));
+         userToStore.setCvu(generateCVU(user.dni()));
+         userToStore.setAlias(generateAlias(user.dni()));
          return mapper.convertValue(userRepository.save(userToStore), UserRegisterResponseDTO.class);
     }
 

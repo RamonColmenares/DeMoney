@@ -4,8 +4,8 @@ import java.util.Random;
 public class CVUService {
         private static final int COD_BCRA = 0;
         private static final int NRO_SUCURSAL = 1;
-        private String nroCuenta;
-        private Random random;
+        private final String nroCuenta;
+        private final Random random;
 
         public CVUService(long seed) {
             this.random = new Random(seed);

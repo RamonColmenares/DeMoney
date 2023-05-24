@@ -1,11 +1,12 @@
 package com.digitalmoney.msusers.config.beans;
 
-import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.representations.AccessTokenResponse;
+import org.keycloak.admin.client.token.TokenManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 @Service
 public class KeycloakConnectionManager {
@@ -24,6 +25,17 @@ public class KeycloakConnectionManager {
     @Value("${keycloak.password}")
     public String password;
 
+    public String getKeycloakAuthUrl() {
+        return keycloakAuthUrl;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getRealm() {
+        return realm;
+    }
 
     public Keycloak getConnectionAdmin() {
         return KeycloakBuilder.builder()
@@ -37,7 +49,7 @@ public class KeycloakConnectionManager {
     }
 
     /* MANEJAR ERRORES MEJOR */
-    public AccessTokenResponse getConnectionUser(String username, String password) throws Exception {
+    public TokenManager getConnectionUser(String username, String password) throws Exception {
         Keycloak keycloak = KeycloakBuilder.builder()
                 .serverUrl(keycloakAuthUrl)
                 .realm(realm)
@@ -46,7 +58,7 @@ public class KeycloakConnectionManager {
                 .username(username)
                 .password(password)
                 .build();
-        return keycloak.tokenManager().getAccessToken();
+        return keycloak.tokenManager();
 	
 	/* 
 	Y si no encuentra nada? 
@@ -55,24 +67,10 @@ public class KeycloakConnectionManager {
 	
 	*/
     }
-
-    public Keycloak getConnectionService() {
-        return  KeycloakBuilder.builder()
-                .serverUrl(keycloakAuthUrl)
-                .realm(realm) // usually it's master
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .build();
-    }
-
-    public Keycloak getConnectionWithToken() {
-        return Keycloak.getInstance(
-                keycloakAuthUrl,
-                realm, // the realm
-                null, // the username - we're not using these since we already have a token
-                null, // the password
-                clientId, // the client id
-                clientSecret // the client secret
-        );
+    public MultiValueMap<String, String> getRequestParamsWithClient() {
+        MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("client_id", clientId);
+        requestParams.add("client_secret", clientSecret);
+        return requestParams;
     }
 }
