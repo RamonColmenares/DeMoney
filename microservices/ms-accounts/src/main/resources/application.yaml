@@ -1,0 +1,20 @@
+server:
+  port: 8082
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ms-accounts
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  config:
+    import: optional:file:.env.local[.properties]
+
+
+logging:
+  level:
+    root: INFO
