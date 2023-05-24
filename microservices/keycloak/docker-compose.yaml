@@ -1,0 +1,36 @@
+# docker version
+version: "3"
+
+services:
+  Backend_Frontend:
+    image: quay.io/keycloak/keycloak:20.0.0
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres_svr
+      KC_DB_URL_DATABASE: db_name
+      KC_DB_PASSWORD: password
+      KC_DB_USERNAME: user_name
+      KC_DB_SCHEMA: public
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KEYCLOAK_ADMIN: ${KEYCLOAK_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres_svr:
+        condition: service_healthy
+
+  postgres_svr:
+    image: postgres:10
+    command: postgres -c 'max_connections=200' && postgres -c 'shared_buffers=24MB'
+    environment:
+      # Environment Variables expecially for Postgres
+      POSTGRES_DB: db_name
+      POSTGRES_USER: user_name
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: "exit 0"
+    ports:
+      - "5432:5432"

@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+
+logging:
+  level:
+    root: INFO

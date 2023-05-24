@@ -1,0 +1,47 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ms-users
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  config:
+    import: optional:file:.env.local[.properties]
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}
+
+keycloak:
+  url: ${KEYCLOAK_URL}
+  auth-server-url: ${keycloak.url}
+  realm: ${KEYCLOAK_REALM}
+  resource: ${KEYCLOAK_RESOURCE}
+  username: ${KEYCLOAK_USERNAME}
+  credentials:
+    secret: ${KEYCLOAK_CREDENTIALS_SECRET}
+  password: ${KEYCLOAK_PASSWORD}
+  use-resource-role-mappings: true
+
+app:
+  keycloak:
+    client-id: ${keycloak.resource}
+    client-secret: ${KEYCLOAK_CREDENTIALS_SECRET}
+    login.url: ${keycloak.url}/auth/realms/demo/protocol/openid-connect/token
+
+quarkus:
+  oidc:
+    auth-server-url: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}
+    client-id: ${keycloak.resource}
+    credentials:
+      secret: ${KEYCLOAK_CREDENTIALS_SECRET}
+    tls:
+      verification: none
+  keycloak:
+    policy-enforcer:
+      enable: true
+    devservices.realm-path: quarkus-realm.json

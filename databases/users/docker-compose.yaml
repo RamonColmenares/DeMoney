@@ -1,0 +1,25 @@
+version: '1.0'
+
+services:
+  users_db:
+    image: mysql:8.0.23
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      MYSQL_DATABASE: users
+      MYSQL_USER: ms-users
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 3306:3306
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./sql-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - ms-users
+
+volumes:
+  db_data: {}
+
+networks:
+  ms-users:
+    driver: bridge
