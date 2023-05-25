@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
     private final KeycloakService keycloakService;

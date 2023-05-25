@@ -1,10 +1,10 @@
 package com.digitalmoney.msaccounts.persistency.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
 @Entity(name = "accounts") @Data
 public class Account {
 

@@ -35,14 +35,14 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.GET, "/ping").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/test-db").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/test-keycloak").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/me/logout").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/refresh-token").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/ping").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/test-db").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/test-keycloak").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/users/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/me/logout").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/refresh-token").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/error").permitAll()
                         .anyRequest().authenticated()
 
                 );

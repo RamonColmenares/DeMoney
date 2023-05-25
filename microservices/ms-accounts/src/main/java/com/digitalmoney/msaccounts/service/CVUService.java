@@ -1,4 +1,4 @@
-package com.digitalmoney.msusers.service;
+package com.digitalmoney.msaccounts.service;
 import java.util.Random;
 
 public class CVUService {
