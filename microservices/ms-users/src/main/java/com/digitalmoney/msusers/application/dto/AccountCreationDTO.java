@@ -1,8 +1,11 @@
 package com.digitalmoney.msusers.application.dto;
 
-public record AccountCreationDTO(
-        Long id,
-        Long user_id,
-        String cvu,
-        String alias
-) {}
+import lombok.Data;
+
+@Data
+public class AccountCreationDTO {
+    private Long id;
+    private Long user_id;
+    private String cvu;
+    private String alias;
+};

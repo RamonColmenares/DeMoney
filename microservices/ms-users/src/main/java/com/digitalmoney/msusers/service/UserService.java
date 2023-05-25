@@ -33,7 +33,14 @@ public class UserService {
 
         // Could not write request: no suitable HttpMessageConverter found for request type [com.digitalmoney.msusers.application.dto.UserAccountDTO]
 
-         AccountCreationDTO account = accountFeignService.createAccount(accountToCreate).getBody();
+         AccountCreationDTO account;
+         try {
+             account = accountFeignService.createAccount(accountToCreate).getBody();
+         } catch (Exception e) {
+             log.error("Error connecting with account service, {} threw {}", accountToCreate, e);
+             userRepository.delete(userStored);
+             throw new UserRegisterException(e.getMessage());
+         }
 
          return new UserRegisterResponseDTO(
                  userStored.getFirstName(),
@@ -41,8 +48,8 @@ public class UserService {
                  userStored.getDni(),
                  userStored.getEmail(),
                  userStored.getPhone(),
-                 account.cvu(),
-                 account.alias());
+                 account.getCvu(),
+                 account.getAlias());
     }
 
 

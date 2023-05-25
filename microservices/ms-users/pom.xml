@@ -125,6 +125,12 @@
 			<artifactId>spring-cloud-openfeign-core</artifactId>
 			<version>4.0.2</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-jackson -->
+		<dependency>
+			<groupId>io.github.openfeign</groupId>
+			<artifactId>feign-jackson</artifactId>
+			<version>12.3</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>

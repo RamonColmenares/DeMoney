@@ -1,5 +1,7 @@
 package com.digitalmoney.msaccounts.config.security;
 
+import com.digitalmoney.msaccounts.config.filters.LoggingFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,14 +17,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.addFilterBefore(new LoggingFilter(), UsernamePasswordAuthenticationFilter.class);
+
         http
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.GET, "/accounts/test-db").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/accounts/create").permitAll()
-                        .anyRequest().authenticated()
-                );
+                .csrf().disable()
+            .authorizeHttpRequests((requests) -> requests
+                    .requestMatchers(HttpMethod.GET, "/accounts/test-db").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/accounts/create").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/error").permitAll()
+                    .anyRequest().permitAll()
+            );
 
         return http.build();
     }}
