@@ -10,4 +10,6 @@ public interface ICardService {
 
     CardDTO findByIdAndAccountId(Long cardId, Long accountId);
 
+    void deleteCardByIdAndAccountId(Long accountId, Long cardId) throws Exception;
+
 }
