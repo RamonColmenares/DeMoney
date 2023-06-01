@@ -36,8 +36,6 @@ public class UserService {
          User userToStore = mapper.convertValue(user, User.class);
          BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
          userToStore.setPassword(passwordEncoder.encode(userToStore.getPassword()));
-         userToStore.setCvu(generateCVU(user.dni()));
-         userToStore.setAlias(generateAlias(user.dni()));
          return mapper.convertValue(userRepository.save(userToStore), UserRegisterResponseDTO.class);
     }
 
