@@ -38,17 +38,15 @@ public class CardService implements ICardService {
     }
 
     public Card addCard(Long accountId, CardDTO cardDTO) throws NotFoundException, AlreadyExistsException {
-        Card card;
         Account account = accountService.findById(accountId);
         if (account == null) {
             throw new NotFoundException("No account was found with the specified ID");
         }
-        Card existingCard = findByCardNumber(cardDTO.cardNumber());
-        if (existingCard != null) {
+        if (findByCardNumber(cardDTO.cardNumber()) != null) {
             throw new AlreadyExistsException("A card with the specified card number already exists");
         }
 
-        card = createCard(cardDTO);
+        Card card = createCard(cardDTO);
         card.setAccount(account);
 
         return cardRepository.save(card);

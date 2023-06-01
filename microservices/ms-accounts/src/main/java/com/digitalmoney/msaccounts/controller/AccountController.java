@@ -1,6 +1,7 @@
 package com.digitalmoney.msaccounts.controller;
 
 import com.digitalmoney.msaccounts.application.dto.CardDTO;
+import com.digitalmoney.msaccounts.application.dto.ErrorMessageDTO;
 import com.digitalmoney.msaccounts.application.dto.UserAccountDTO;
 import com.digitalmoney.msaccounts.application.exception.AlreadyExistsException;
 import com.digitalmoney.msaccounts.application.exception.NotFoundException;
@@ -8,6 +9,7 @@ import com.digitalmoney.msaccounts.persistency.entity.Account;
 import com.digitalmoney.msaccounts.persistency.entity.Card;
 import com.digitalmoney.msaccounts.service.AccountService;
 import com.digitalmoney.msaccounts.service.CardService;
+import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +54,11 @@ public class AccountController {
         try {
             result = cardService.addCard(accountId, cardDTO);
         } catch (NotFoundException e) {
-            return ResponseEntity.status(400).build();
+            return ResponseEntity.status(400).body(new ErrorMessageDTO("An Account with the specified ID could not be found"));
         } catch (AlreadyExistsException e) {
-            return ResponseEntity.status(409).build();
+            return ResponseEntity.status(409).body(new ErrorMessageDTO("A Card with the specified card number already exists"));
+        } catch (ConstraintViolationException e) {
+            return ResponseEntity.status(400).body(new ErrorMessageDTO("Malformed Card data"));
         }
         return ResponseEntity.ok(result);
     }
