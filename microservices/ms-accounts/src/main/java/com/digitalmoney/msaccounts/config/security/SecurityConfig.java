@@ -17,9 +17,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.addFilterAfter(new LoggingFilter(), UsernamePasswordAuthenticationFilter.class);
+
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.GET, "/test-db").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/{id}/transactions/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

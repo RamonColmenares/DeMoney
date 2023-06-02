@@ -5,11 +5,14 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
+@Data
 @Table(name = "transactions")
 public class Transaction {
 
@@ -19,7 +22,7 @@ public class Transaction {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(referencedColumnName = "account_id")
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @NotNull
@@ -29,7 +32,7 @@ public class Transaction {
 
     @NotNull
     @Column(name = "transaction_date")
-    private LocalDate transactionDate;
+    private LocalDateTime transactionDate;
 
     @NotNull
     @Size(max = 255)
@@ -52,6 +55,6 @@ public class Transaction {
 
     // Enums
     public enum TransactionType {
-        INCOME, EXPENSE
+        income, expense
     }
 }

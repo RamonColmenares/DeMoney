@@ -163,6 +163,10 @@ public class KeycloakService {
         keycloak.realm("Master").users().get(userId).logout();
         keycloak.close();
     }
+
+    public void addDbUserId(Long id) {
+
+    }
 }
 
 record KeycloakTokenResponse(

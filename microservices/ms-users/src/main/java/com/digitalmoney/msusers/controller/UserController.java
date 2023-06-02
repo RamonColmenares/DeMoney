@@ -3,6 +3,8 @@ package com.digitalmoney.msusers.controller;
 import com.digitalmoney.msusers.application.dto.UserLoginDTO;
 import com.digitalmoney.msusers.application.dto.UserLoginResponseDTO;
 import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
+import com.digitalmoney.msusers.application.dto.UserRegisterResponseDTO;
+import com.digitalmoney.msusers.config.security.TokenProvider;
 import com.digitalmoney.msusers.persistency.entity.User;
 import com.digitalmoney.msusers.service.KeycloakService;
 import com.digitalmoney.msusers.service.UserService;
@@ -27,6 +29,7 @@ import org.springframework.http.HttpStatus;
 public class UserController {
     private final UserService userService;
     private final KeycloakService keycloakService;
+    private final TokenProvider tokenProvider;
 
 
     @GetMapping("/ping")
@@ -48,7 +51,9 @@ public class UserController {
     public ResponseEntity<?> register(@RequestBody @Valid UserRegisterDTO user) {
         try (Response response = keycloakService.createInKeycloak(user)) {
             if (response.getStatus() == 201) {
-                return ResponseEntity.ok().body(userService.createUser(user));
+                UserRegisterResponseDTO saved = userService.createUser(user);
+                keycloakService.addDbUserId(saved.id());
+                return ResponseEntity.ok().body(saved);
             }
             if (response.getStatus() == 409) {
                 return ResponseEntity.status(409).body("It seems like this email is already registered.");
@@ -86,7 +91,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDTO user) {
     UserLoginResponseDTO responseDTO = keycloakService.userLogin(user.email(), user.password());
-	if (responseDTO.token() == null) {
+	if (responseDTO == null || responseDTO.token() == null) {
 	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	}
 	return ResponseEntity.ok(responseDTO);
@@ -105,5 +110,12 @@ public class UserController {
     public ResponseEntity<?> getGrants(@RequestHeader("Authorization") String authorization) throws VerificationException {
         String token = authorization.split("Bearer ")[1];
         return ResponseEntity.ok(keycloakService.getGrants(token));
+    }
+
+    @PostMapping("/validate")
+    public Boolean validateToken(@RequestBody String token) {
+        System.out.println(token);
+        System.out.println(tokenProvider.isValid(token));
+        return tokenProvider.isValid(token);
     }
 }
