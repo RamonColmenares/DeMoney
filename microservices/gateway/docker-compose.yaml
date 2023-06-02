@@ -4,17 +4,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: gateway:1.0
+    image: ms-users:latest
     ports:
       - "80:8083"
     environment:
-      MS_USERS_DNS: ms-users
-      MS_ACCOUNTS_DNS: ms-accounts
+      - MS_USERS_DNS: ${MS_USERS_DNS}
+      - MS_ACCOUNTS_DNS: ${MS_ACCOUNTS_DNS}
     networks:
       - ms-users
-    depends_on:
-      - ms-users
-      - ms-accounts
 networks:
   ms-users:
     driver: bridge
