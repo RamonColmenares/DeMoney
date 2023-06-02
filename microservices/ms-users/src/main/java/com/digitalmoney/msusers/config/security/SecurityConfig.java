@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users/test-db").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/test-keycloak").permitAll()
                         .requestMatchers(HttpMethod.POST,"/users/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/me/logout").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/refresh-token").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/error").permitAll()
