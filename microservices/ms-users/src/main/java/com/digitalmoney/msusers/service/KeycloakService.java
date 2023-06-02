@@ -2,11 +2,13 @@ package com.digitalmoney.msusers.service;
 
 import com.digitalmoney.msusers.application.dto.UserLoginResponseDTO;
 import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
+import com.digitalmoney.msusers.application.dto.UserUpdateDTO;
 import com.digitalmoney.msusers.config.beans.KeycloakConnectionManager;
 import com.digitalmoney.msusers.config.security.TokenProvider;
 import lombok.extern.log4j.Log4j2;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.token.TokenManager;
 import org.keycloak.common.VerificationException;
 import org.keycloak.representations.AccessToken;
@@ -19,7 +21,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -61,6 +66,80 @@ public class KeycloakService {
         return keycloakConnectionManager.getConnectionAdmin().realm("users-bank").users().create(userDB);
     }
 
+    public Response updateInKeycloak(String email, UserUpdateDTO user) {
+        String userId = getUserIdByEmail(email);
+
+        if (userId == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        UserResource userResource = keycloakConnectionManager.getConnectionAdmin()
+                .realm("users-bank")
+                .users()
+                .get(userId);
+
+        UserRepresentation userRepresentation = userResource.toRepresentation();
+
+        if (user.password() != null) {
+            CredentialRepresentation credential = new CredentialRepresentation();
+            credential.setType(CredentialRepresentation.PASSWORD);
+            credential.setValue(user.password());
+            credential.setTemporary(false);
+
+            List<CredentialRepresentation> credentials = userRepresentation.getCredentials();
+            if (credentials == null) {
+                credentials = new ArrayList<>();
+            } else {
+                // Remove existing password credentials
+                credentials.removeIf(cred -> cred.getType().equals(CredentialRepresentation.PASSWORD));
+            }
+            credentials.add(credential);
+            userRepresentation.setCredentials(credentials);
+        }
+
+        if (user.firstName() != null) {
+            userRepresentation.setFirstName(user.firstName());
+        }
+
+        if (user.lastName() != null) {
+            userRepresentation.setLastName(user.lastName());
+        }
+
+        if (user.email() != null) {
+            UserRepresentation newUserRepresentation = new UserRepresentation();
+            newUserRepresentation.setUsername(user.email());
+            newUserRepresentation.setEmail(user.email());
+            newUserRepresentation.setFirstName(userRepresentation.getFirstName());
+            newUserRepresentation.setLastName(userRepresentation.getLastName());
+            newUserRepresentation.setEnabled(userRepresentation.isEnabled());
+            newUserRepresentation.setRealmRoles(userRepresentation.getRealmRoles());
+
+            CredentialRepresentation credential = new CredentialRepresentation();
+            credential.setType(CredentialRepresentation.PASSWORD);
+            credential.setValue(user.password());
+            credential.setTemporary(false);
+
+            newUserRepresentation.setCredentials(singletonList(credential));
+
+            // create the new user with the new username
+            Response response = keycloakConnectionManager.getConnectionAdmin()
+                    .realm("users-bank")
+                    .users()
+                    .create(newUserRepresentation);
+
+            if (response.getStatus() == 201) {
+                // new user created correctly, now we have to delete old one
+                userResource.remove();
+                return Response.ok().build();
+            } else {
+                // an error has ocurred while creating the new user
+                return Response.serverError().build();
+            }
+        }
+
+        userResource.update(userRepresentation);
+        return Response.ok().build();
+    }
 
     public List<UserRepresentation> test(String username) {
         return keycloakConnectionManager.getConnectionAdmin().realm("users-bank").users().search(username, true);
@@ -75,17 +154,9 @@ public class KeycloakService {
         }
     }
 
-    public UserLoginResponseDTO userLogin(String username, String password){
-	TokenManager kToken;
-	try {
-	    kToken = keycloakConnectionManager.getConnectionUser(username, password);
+    public UserLoginResponseDTO userLogin(String username, String password) throws NotAuthorizedException {
+        TokenManager kToken = keycloakConnectionManager.getConnectionUser(username, password);
         return new UserLoginResponseDTO(kToken.getAccessToken().getToken(), kToken.getAccessToken().getRefreshToken());
-
-	/* MANEJAR EXCEPTIONS ACÁ */
-	} catch (Exception e) {
-        e.printStackTrace();
-	    return null;
-	}
     }
 
     public void logout(String token, String refreshToken) {
@@ -120,11 +191,17 @@ public class KeycloakService {
         return accessToken.getRealmAccess().getRoles().stream().map(e -> "ROLE_" + e.toUpperCase()).collect(Collectors.toList());
     }
 
-    public Optional<UserRepresentation> getByEmail(String email) {
-        Keycloak keycloak = keycloakConnectionManager.getConnectionAdmin();
-        Optional<UserRepresentation> userRepresentation = keycloak.realm("users-bank").users().search(email, true).stream().findAny();
-        keycloak.close();
-        return userRepresentation;
+    private String getUserIdByEmail(String email) {
+        List<UserRepresentation> users = keycloakConnectionManager.getConnectionAdmin()
+                .realm("users-bank")
+                .users()
+                .search(email, true);
+
+        if (!users.isEmpty()) {
+            return users.get(0).getId();
+        } else {
+            return null;
+        }
     }
 
     public boolean validateToken(String token) {
@@ -164,8 +241,18 @@ public class KeycloakService {
         keycloak.close();
     }
 
-    public void addDbUserId(Long id) {
+    public void addDbUserId(Long id, String email) {
+            String userId = getUserIdByEmail(email);
 
+            UserResource userResource = keycloakConnectionManager.getConnectionAdmin()
+                    .realm("users-bank")
+                    .users()
+                    .get(userId);
+
+            UserRepresentation userRepresentation = userResource.toRepresentation();
+            userRepresentation.setAttributes(new HashMap<>());
+            userRepresentation.getAttributes().put("usedDBID", List.of(id.toString()));
+            userResource.update(userRepresentation);
     }
 }
 

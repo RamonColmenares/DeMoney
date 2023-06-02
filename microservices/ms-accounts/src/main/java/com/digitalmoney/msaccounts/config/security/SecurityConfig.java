@@ -1,6 +1,6 @@
 package com.digitalmoney.msaccounts.config.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.digitalmoney.msaccounts.config.filters.LoggingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,14 +17,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.addFilterAfter(new LoggingFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new LoggingFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.GET, "/test-db").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/{id}/transactions/**").permitAll()
-                        .anyRequest().authenticated()
-                );
+                .csrf().disable()
+            .authorizeHttpRequests((requests) -> requests
+                    .requestMatchers(HttpMethod.GET, "/test-db").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/create").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/{accountId}/cards").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/{accountId}/cards/{cardId}").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/{id}/transactions/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/error").permitAll()
+                    .anyRequest().permitAll()
+            );
 
         return http.build();
     }}
