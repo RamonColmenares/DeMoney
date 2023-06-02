@@ -3,6 +3,11 @@ package com.digitalmoney.msusers.controller;
 import com.digitalmoney.msusers.application.dto.UserLoginDTO;
 import com.digitalmoney.msusers.application.dto.UserLoginResponseDTO;
 import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
+import com.digitalmoney.msusers.application.dto.UserUpdateDTO;
+import com.digitalmoney.msusers.application.exception.UserBadRequestException;
+import com.digitalmoney.msusers.application.exception.UserInternalServerException;
+import com.digitalmoney.msusers.application.exception.UserNotFoundException;
+import com.digitalmoney.msusers.application.exception.UserUnauthorizedException;
 import com.digitalmoney.msusers.persistency.entity.User;
 import com.digitalmoney.msusers.service.KeycloakService;
 import com.digitalmoney.msusers.service.UserService;
@@ -12,18 +17,16 @@ import lombok.AllArgsConstructor;
 import org.keycloak.common.VerificationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.Response;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
     private final KeycloakService keycloakService;
@@ -47,11 +50,11 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid UserRegisterDTO user) {
         try (Response response = keycloakService.createInKeycloak(user)) {
-            if (response.getStatus() == 201) {
+            if (response.getStatus() == HttpStatus.CREATED.value()) {
                 return ResponseEntity.ok().body(userService.createUser(user));
             }
-            if (response.getStatus() == 409) {
-                return ResponseEntity.status(409).body("It seems like this email is already registered.");
+            if (response.getStatus() == HttpStatus.CONFLICT.value()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("It seems like this email is already registered.");
             }
             return ResponseEntity.status(response.getStatus()).body(response.getStatusInfo());
         } catch (DataIntegrityViolationException e) {
@@ -75,14 +78,6 @@ public class UserController {
         }
     }
 
-    @PostMapping("/me/logoutv2")
-    public ResponseEntity<?> logoutv2() {
-        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        keycloakService.logoutv2(userId);
-        return ResponseEntity.noContent().build();
-    }
-
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDTO user) {
     UserLoginResponseDTO responseDTO = keycloakService.userLogin(user.email(), user.password());
@@ -90,6 +85,17 @@ public class UserController {
 	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	}
 	return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findByID(@PathVariable String id) throws UserNotFoundException, UserBadRequestException, UserUnauthorizedException {
+        return ResponseEntity.ok().body(userService.findUserByID(id));
+    }
+
+    // CHEQUEAR, UNA VEZ QUE SE ACTUALIZA EMAIL EN KEYCLOAK NO ME DEJA LOGUEARME -> responseDTO is null
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody @Valid UserUpdateDTO user) throws UserNotFoundException, UserBadRequestException, UserUnauthorizedException, UserInternalServerException {
+        return ResponseEntity.ok().body(userService.updateUser(id, user));
     }
 
     @GetMapping("/refresh-token")
@@ -106,4 +112,5 @@ public class UserController {
         String token = authorization.split("Bearer ")[1];
         return ResponseEntity.ok(keycloakService.getGrants(token));
     }
+
 }
