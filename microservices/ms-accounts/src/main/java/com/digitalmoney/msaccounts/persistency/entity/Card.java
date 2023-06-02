@@ -2,11 +2,13 @@ package com.digitalmoney.msaccounts.persistency.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Entity(name = "cards") @Data
+@Entity(name = "cards") @Data @AllArgsConstructor @NoArgsConstructor
 public class Card {
 
     @Id
@@ -30,7 +32,7 @@ public class Card {
     private String cvv;
 
     @NotNull(message = "Account is mandatory")
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
 

@@ -48,8 +48,7 @@ public class KeycloakConnectionManager {
                 .build();
     }
 
-    /* MANEJAR ERRORES MEJOR */
-    public TokenManager getConnectionUser(String username, String password) throws Exception {
+    public TokenManager getConnectionUser(String username, String password) {
         Keycloak keycloak = KeycloakBuilder.builder()
                 .serverUrl(keycloakAuthUrl)
                 .realm(realm)
@@ -59,13 +58,6 @@ public class KeycloakConnectionManager {
                 .password(password)
                 .build();
         return keycloak.tokenManager();
-	
-	/* 
-	Y si no encuentra nada? 
-	    Error? throws, no catch (maneja el service)
-	    Null? retornar así
-	
-	*/
     }
     public MultiValueMap<String, String> getRequestParamsWithClient() {
         MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
