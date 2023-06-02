@@ -30,7 +30,7 @@ public class Card {
     private String cvv;
 
     @NotNull(message = "Account is mandatory")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 

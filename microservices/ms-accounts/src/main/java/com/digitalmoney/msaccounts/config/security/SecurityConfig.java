@@ -27,6 +27,8 @@ public class SecurityConfig {
             .authorizeHttpRequests((requests) -> requests
                     .requestMatchers(HttpMethod.GET, "/accounts/test-db").permitAll()
                     .requestMatchers(HttpMethod.POST, "/accounts/create").permitAll()
+                    .requestMatchers(HttpMethod.GET, "accounts/{accountId}/cards").permitAll()
+                    .requestMatchers(HttpMethod.GET, "accounts/{accountId}/cards/{cardId}").permitAll()
                     .requestMatchers(HttpMethod.GET, "/error").permitAll()
                     .anyRequest().permitAll()
             );
