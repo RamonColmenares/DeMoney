@@ -11,7 +11,7 @@ COPY . /app
 RUN mvn package
 
 # Expose the port that the Spring Boot application listens on
-EXPOSE 8080
+EXPOSE 8081
 
 # Set the command to run the Spring Boot application when the container starts
 CMD ["sh", "-c", "java -jar $(find target -name '*.jar' | grep -v original)"]
