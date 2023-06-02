@@ -71,7 +71,7 @@ public class TokenProvider {
         try {
             ObjectMapper om = new ObjectMapper();
             JSONWebKeySet jwks = om.readValue(new URL(keycloakConnectionManager.getKeycloakAuthUrl() + "/realms/" + keycloakConnectionManager.getRealm() + "/protocol/openid-connect/certs").openStream(), JSONWebKeySet.class);
-            JWK jwk = jwks.getKeys()[1];
+            JWK jwk = jwks.getKeys()[0];
             return JWKParser.create(jwk).toPublicKey();
         } catch (Exception e) {
             LOGGER.error("Exception", e);

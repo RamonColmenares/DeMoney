@@ -1,6 +1,6 @@
 package com.digitalmoney.msaccounts.controller;
 
-import com.digitalmoney.msaccounts.application.dto.CardDTO;
+import com.digitalmoney.msaccounts.application.dto.AccountUpdateDTO;
 import com.digitalmoney.msaccounts.application.dto.UserAccountDTO;
 import com.digitalmoney.msaccounts.application.exception.ResourceNotFoundException;
 import com.digitalmoney.msaccounts.application.dto.ErrorMessageDTO;
@@ -12,8 +12,15 @@ import com.digitalmoney.msaccounts.service.AccountService;
 import com.digitalmoney.msaccounts.service.CardService;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import com.digitalmoney.msaccounts.application.exception.AccountBadRequestException;
+import com.digitalmoney.msaccounts.application.exception.AccountInternalServerException;
+import com.digitalmoney.msaccounts.application.exception.AccountNotFoundException;
+import com.digitalmoney.msaccounts.application.exception.AccountUnauthorizedException;
+import com.digitalmoney.msaccounts.application.dto.CardDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
@@ -48,40 +55,47 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/{accountId}/cards")
-    public ResponseEntity<?> getAllCardsByAccountId(@PathVariable Long accountId){
-
-        try {
-            List<CardDTO> cards = cardService.findAllByAccountId(accountId);
-            System.out.println(cards);
-            if (cards.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK).body("There are no cards associated with the account.");
-            }
-
-            return ResponseEntity.ok(cards);
-
-        } catch (HttpClientErrorException.BadRequest e) {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("bad request");
-
-        } catch (HttpClientErrorException.NotFound e) {
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("cards not found");
-
-        } catch (HttpClientErrorException.Unauthorized e) {
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unauthorized");
-
-        } catch (HttpClientErrorException.Forbidden e) {
-
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("forbidden");
-
-        } catch (Exception e) {
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("an error occurred");
-        }
-
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findByID(@PathVariable String id) throws AccountNotFoundException, AccountBadRequestException, AccountUnauthorizedException {
+        return ResponseEntity.ok().body(service.findAccountByUserID(id));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody @Valid AccountUpdateDTO account) throws AccountNotFoundException, AccountBadRequestException, AccountUnauthorizedException, AccountInternalServerException {
+        return ResponseEntity.ok().body(service.updateAccount(id, account));
+    }
+        @GetMapping("/{accountId}/cards")
+        public ResponseEntity<?> getAllCardsByAccountId (@PathVariable Long accountId){
+
+            try {
+                List<CardDTO> cards = cardService.findAllByAccountId(accountId);
+                System.out.println(cards);
+                if (cards.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.OK).body("There are no cards associated with the account.");
+                }
+
+                return ResponseEntity.ok(cards);
+
+            } catch (HttpClientErrorException.BadRequest e) {
+
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("bad request");
+
+            } catch (HttpClientErrorException.NotFound e) {
+
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("cards not found");
+
+            } catch (HttpClientErrorException.Unauthorized e) {
+
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unauthorized");
+
+            } catch (HttpClientErrorException.Forbidden e) {
+
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("forbidden");
+
+            } catch (Exception e) {
+
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("an error occurred");
+            }
 
     @PostMapping("/{accountId}/cards")
     public ResponseEntity<?> addCard(@PathVariable Long accountId, @RequestBody CardDTO cardDTO){
@@ -98,17 +112,17 @@ public class AccountController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{accountId}/cards/{cardId}")
-    public ResponseEntity<?> getCardByIdAndAccountId(@PathVariable Long accountId, @PathVariable Long cardId) {
+        @GetMapping("/{accountId}/cards/{cardId}")
+        public ResponseEntity<?> getCardByIdAndAccountId (@PathVariable Long accountId, @PathVariable Long cardId){
 
-        CardDTO card = null;
+            CardDTO card = null;
 
-        try {
+            try {
 
-            card = cardService.findByIdAndAccountId(cardId, accountId);
-            return ResponseEntity.ok(card);
+                card = cardService.findByIdAndAccountId(cardId, accountId);
+                return ResponseEntity.ok(card);
 
-        } /*catch (HttpClientErrorException.BadRequest e) {
+            } /*catch (HttpClientErrorException.BadRequest e) {
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("bad request");
 
@@ -124,15 +138,15 @@ public class AccountController {
 
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("forbidden");
 
-        } */catch (Exception e) {
+        } */ catch (Exception e) {
 
-            if (card == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("card not found");
+                if (card == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("card not found");
+                }
+
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("an error occurred");
             }
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("an error occurred");
         }
-    }
 
     @DeleteMapping("/{accountId}/cards/{cardId}")
     public ResponseEntity<String> deleteCardByIdAndAccountId(@PathVariable Long accountId, @PathVariable Long cardId) {

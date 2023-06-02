@@ -1,8 +1,6 @@
 package com.digitalmoney.msaccounts.config.security;
 
 import com.digitalmoney.msaccounts.config.filters.LoggingFilter;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
