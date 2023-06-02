@@ -19,6 +19,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
@@ -80,11 +81,16 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDTO user) {
-    UserLoginResponseDTO responseDTO = keycloakService.userLogin(user.email(), user.password());
-	if (responseDTO.token() == null) {
-	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-	}
-	return ResponseEntity.ok(responseDTO);
+        UserLoginResponseDTO responseDTO = null;
+        try {
+            responseDTO = keycloakService.userLogin(user.email(), user.password());
+        } catch (NotAuthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping("/{id}")

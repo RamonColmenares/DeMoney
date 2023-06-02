@@ -2,18 +2,24 @@ package com.digitalmoney.msaccounts.controller;
 
 import com.digitalmoney.msaccounts.application.dto.AccountUpdateDTO;
 import com.digitalmoney.msaccounts.application.dto.UserAccountDTO;
+import com.digitalmoney.msaccounts.application.exception.ResourceNotFoundException;
+import com.digitalmoney.msaccounts.application.dto.ErrorMessageDTO;
+import com.digitalmoney.msaccounts.application.exception.AlreadyExistsException;
+import com.digitalmoney.msaccounts.application.exception.NotFoundException;
+import com.digitalmoney.msaccounts.persistency.entity.Account;
+import com.digitalmoney.msaccounts.persistency.entity.Card;
+import com.digitalmoney.msaccounts.service.AccountService;
+import com.digitalmoney.msaccounts.service.CardService;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.http.HttpStatus;
 import com.digitalmoney.msaccounts.application.exception.AccountBadRequestException;
 import com.digitalmoney.msaccounts.application.exception.AccountInternalServerException;
 import com.digitalmoney.msaccounts.application.exception.AccountNotFoundException;
 import com.digitalmoney.msaccounts.application.exception.AccountUnauthorizedException;
 import com.digitalmoney.msaccounts.application.dto.CardDTO;
-import com.digitalmoney.msaccounts.persistency.entity.Account;
-import com.digitalmoney.msaccounts.persistency.entity.Card;
-import com.digitalmoney.msaccounts.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.digitalmoney.msaccounts.service.CardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -35,7 +41,6 @@ public class AccountController {
     public List<Account> testDb() {
         return service.findAll();
     }
-
     @GetMapping("/test-db2")
     public List<Card> testDb2() {
         return cardService.findAll();
@@ -92,7 +97,20 @@ public class AccountController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("an error occurred");
             }
 
+    @PostMapping("/{accountId}/cards")
+    public ResponseEntity<?> addCard(@PathVariable Long accountId, @RequestBody CardDTO cardDTO){
+        Card result;
+        try {
+            result = cardService.addCard(accountId, cardDTO);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(400).body(new ErrorMessageDTO("An Account with the specified ID could not be found"));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(409).body(new ErrorMessageDTO("A Card with the specified card number already exists"));
+        } catch (ConstraintViolationException e) {
+            return ResponseEntity.status(400).body(new ErrorMessageDTO("Malformed Card data"));
         }
+        return ResponseEntity.ok(result);
+    }
 
         @GetMapping("/{accountId}/cards/{cardId}")
         public ResponseEntity<?> getCardByIdAndAccountId (@PathVariable Long accountId, @PathVariable Long cardId){
@@ -130,4 +148,16 @@ public class AccountController {
             }
         }
 
+    @DeleteMapping("/{accountId}/cards/{cardId}")
+    public ResponseEntity<String> deleteCardByIdAndAccountId(@PathVariable Long accountId, @PathVariable Long cardId) {
+        try {
+            cardService.deleteCardByIdAndAccountId(accountId, cardId);
+            return ResponseEntity.ok("Card deleted successfully");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
+
+}

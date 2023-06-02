@@ -31,6 +31,10 @@ public class AccountService {
         return repository.findAll();
     }
 
+    public Account findById(Long accountId) {
+        return repository.findById(accountId).orElse(null);
+    }
+
     public AccountCreationDTO createAccount(UserAccountDTO userDetails) throws AccountInternalServerException {
         Account accountToStore = new Account();
         accountToStore.setUserId(userDetails.user_id());

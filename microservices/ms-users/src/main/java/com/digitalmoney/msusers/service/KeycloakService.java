@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -152,17 +153,9 @@ public class KeycloakService {
         }
     }
 
-    public UserLoginResponseDTO userLogin(String username, String password){
-	TokenManager kToken;
-	try {
-	    kToken = keycloakConnectionManager.getConnectionUser(username, password);
+    public UserLoginResponseDTO userLogin(String username, String password) throws NotAuthorizedException {
+        TokenManager kToken = keycloakConnectionManager.getConnectionUser(username, password);
         return new UserLoginResponseDTO(kToken.getAccessToken().getToken(), kToken.getAccessToken().getRefreshToken());
-
-	/* MANEJAR EXCEPTIONS ACÁ */
-	} catch (Exception e) {
-        e.printStackTrace();
-	    return null;
-	}
     }
 
     public void logout(String token, String refreshToken) {
