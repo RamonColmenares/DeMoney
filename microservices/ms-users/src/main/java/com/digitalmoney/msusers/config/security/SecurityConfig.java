@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -34,14 +35,15 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.GET, "/users/ping").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/test-db").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/test-keycloak").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/users/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/me/logout").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/refresh-token").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/ping").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/test-db").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/test-keycloak").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/me/logout").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/refresh-token").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/error").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/validate").permitAll()
                         .anyRequest().authenticated()
 
                 );

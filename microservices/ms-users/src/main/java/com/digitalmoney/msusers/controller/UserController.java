@@ -3,6 +3,8 @@ package com.digitalmoney.msusers.controller;
 import com.digitalmoney.msusers.application.dto.UserLoginDTO;
 import com.digitalmoney.msusers.application.dto.UserLoginResponseDTO;
 import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
+import com.digitalmoney.msusers.application.dto.UserRegisterResponseDTO;
+import com.digitalmoney.msusers.config.security.TokenProvider;
 import com.digitalmoney.msusers.application.dto.UserUpdateDTO;
 import com.digitalmoney.msusers.application.exception.UserBadRequestException;
 import com.digitalmoney.msusers.application.exception.UserInternalServerException;
@@ -27,10 +29,10 @@ import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
     private final KeycloakService keycloakService;
+    private final TokenProvider tokenProvider;
 
 
     @GetMapping("/ping")
@@ -52,7 +54,9 @@ public class UserController {
     public ResponseEntity<?> register(@RequestBody @Valid UserRegisterDTO user) {
         try (Response response = keycloakService.createInKeycloak(user)) {
             if (response.getStatus() == HttpStatus.CREATED.value()) {
-                return ResponseEntity.ok().body(userService.createUser(user));
+                UserRegisterResponseDTO saved = userService.createUser(user);
+                keycloakService.addDbUserId(saved.id(), saved.email());
+                return ResponseEntity.ok().body(saved);
             }
             if (response.getStatus() == HttpStatus.CONFLICT.value()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("It seems like this email is already registered.");
@@ -119,4 +123,10 @@ public class UserController {
         return ResponseEntity.ok(keycloakService.getGrants(token));
     }
 
+    @PostMapping("/validate")
+    public Boolean validateToken(@RequestBody String token) {
+        System.out.println(token);
+        System.out.println(tokenProvider.isValid(token));
+        return tokenProvider.isValid(token);
+    }
 }

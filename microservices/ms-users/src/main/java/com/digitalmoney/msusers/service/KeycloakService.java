@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -238,6 +239,20 @@ public class KeycloakService {
         Keycloak keycloak = keycloakConnectionManager.getConnectionAdmin();
         keycloak.realm("Master").users().get(userId).logout();
         keycloak.close();
+    }
+
+    public void addDbUserId(Long id, String email) {
+            String userId = getUserIdByEmail(email);
+
+            UserResource userResource = keycloakConnectionManager.getConnectionAdmin()
+                    .realm("users-bank")
+                    .users()
+                    .get(userId);
+
+            UserRepresentation userRepresentation = userResource.toRepresentation();
+            userRepresentation.setAttributes(new HashMap<>());
+            userRepresentation.getAttributes().put("usedDBID", List.of(id.toString()));
+            userResource.update(userRepresentation);
     }
 }
 

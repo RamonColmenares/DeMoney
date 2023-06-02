@@ -25,4 +25,6 @@ public class Account {
         @NotBlank(message = "Alias is mandatory")
         @Column(name = "alias", nullable = false, unique = true)
         private String alias;
+
+        private Double balance;
     }

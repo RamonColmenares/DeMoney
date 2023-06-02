@@ -15,7 +15,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.addFilterBefore(new LoggingFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -23,10 +22,11 @@ public class SecurityConfig {
         http
                 .csrf().disable()
             .authorizeHttpRequests((requests) -> requests
-                    .requestMatchers(HttpMethod.GET, "/accounts/test-db").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/accounts/create").permitAll()
-                    .requestMatchers(HttpMethod.GET, "accounts/{accountId}/cards").permitAll()
-                    .requestMatchers(HttpMethod.GET, "accounts/{accountId}/cards/{cardId}").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/test-db").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/create").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/{accountId}/cards").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/{accountId}/cards/{cardId}").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/{id}/transactions/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/error").permitAll()
                     .anyRequest().permitAll()
             );

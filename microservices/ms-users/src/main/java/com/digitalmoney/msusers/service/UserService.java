@@ -9,6 +9,7 @@ import com.digitalmoney.msusers.application.dto.AccountCreationDTO;
 import com.digitalmoney.msusers.application.dto.UserAccountDTO;
 import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
 import com.digitalmoney.msusers.application.dto.UserRegisterResponseDTO;
+import com.digitalmoney.msusers.application.exception.UserRegisterException;
 import com.digitalmoney.msusers.persistency.entity.User;
 import com.digitalmoney.msusers.persistency.repository.UserRepository;
 import com.digitalmoney.msusers.service.feign.AccountFeignService;
@@ -49,6 +50,7 @@ public class UserService {
          }
 
          return new UserRegisterResponseDTO(
+                 userStored.getId(),
                  userStored.getFirstName(),
                  userStored.getLastName(),
                  userStored.getDni(),
