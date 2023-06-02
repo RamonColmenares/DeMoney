@@ -2,6 +2,7 @@ package com.digitalmoney.msaccounts.controller;
 
 import com.digitalmoney.msaccounts.application.dto.CardDTO;
 import com.digitalmoney.msaccounts.application.dto.UserAccountDTO;
+import com.digitalmoney.msaccounts.application.exception.ResourceNotFoundException;
 import com.digitalmoney.msaccounts.persistency.entity.Account;
 import com.digitalmoney.msaccounts.persistency.entity.Card;
 import com.digitalmoney.msaccounts.service.AccountService;
@@ -113,6 +114,18 @@ public class AccountController {
             }
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("an error occurred");
+        }
+    }
+
+    @DeleteMapping("/{accountId}/cards/{cardId}")
+    public ResponseEntity<String> deleteCardByIdAndAccountId(@PathVariable Long accountId, @PathVariable Long cardId) {
+        try {
+            cardService.deleteCardByIdAndAccountId(accountId, cardId);
+            return ResponseEntity.ok("Card deleted successfully");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
