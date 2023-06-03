@@ -38,13 +38,4 @@ public class User {
     @NotBlank(message = "Password is mandatory")
     @Column(name = "password", nullable = false)
     private String password;
-
-    @NotBlank(message = "CVU is mandatory")
-    @Size(min = 22, max = 22, message = "CVU must be 22 characters long")
-    @Column(name = "cvu", nullable = false, unique = true)
-    private String cvu;
-
-    @NotBlank(message = "Alias is mandatory")
-    @Column(name = "alias", nullable = false, unique = true)
-    private String alias;
 }

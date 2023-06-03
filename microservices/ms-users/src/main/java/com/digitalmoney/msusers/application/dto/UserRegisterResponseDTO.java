@@ -7,7 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 public record UserRegisterResponseDTO
-        (String firstName,
+        (Long id,
+         String firstName,
          String lastName,
          String dni,
          String email,
