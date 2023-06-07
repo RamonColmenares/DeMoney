@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ms-users:latest
+    image: ${IMAGE}
     ports:
       - "8081:8081"
     environment:

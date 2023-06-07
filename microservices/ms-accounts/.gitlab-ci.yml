@@ -1,0 +1,111 @@
+stages:
+  - build
+  - deploy 
+  
+variables:
+  #registry variables
+  REGISTRY_REPOSITORY: "ms-accounts" #nombre de microservicio
+  COMPONENT: "ms-accounts"
+  TAG: "2.0.0"
+  CI_REGISTRY: "registry-grupo5.local"
+  CI_REGISTRY_USER: "grupo5"
+  CI_REGISTRY_PASSWORD: "grupo5"
+  CI_IMAGE: "${CI_REGISTRY}/${REGISTRY_REPOSITORY}:${TAG}"
+  #deploy node
+  SSH_USER: "ec2-user"
+  appNode: "ec2-44-215-238-45.compute-1.amazonaws.com" #ec2user
+  SSH_PORT: "22"
+  DEPLOY_NAME: "$REGISTRY_REPOSITORY"
+  COMPOSE_FILE: "docker-compose.yml" 
+  #variables keycloak 
+  DB_PASSWORD: s3rvice
+  KEYCLOAK_SECRET: dC30gOyoOWNxK5rIPxYn15TS8rEkGxqY
+  KEYCLOAK_REALM: users-bank
+  KEYCLOAK_USER: admin
+  KEYCLOAK_PASSWORD: p4ssword1234
+  MS_USERS_DNS: http://localhost:8081
+  MS_ACCOUNTS_DNS: http://localhost:8082
+  ROOT_PASSWORD: root
+  KEYCLOAK_URL: http://ec2-18-215-159-36.compute-1.amazonaws.com:8080
+  SPRING_DATASOURCE_URL: jdbc:mysql://ec2-34-204-18-22.compute-1.amazonaws.com:3306/accounts
+
+docker-build:
+#  variables:
+#    DOCKER_DRIVER: overlay
+#    DOCKER_HOST: tcp://localhost:2375
+  stage: build
+  image:
+    name: docker:20.10.23-dind
+    #entrypoint: [""]
+  services:
+    - docker:dind
+  before_script:
+    - docker --version
+    - echo ${CI_REGISTRY_PASSWORD} | docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} --password-stdin
+  script:
+    - |
+      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+        tag=""
+        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+      else
+        tag=":$CI_COMMIT_REF_SLUG"
+        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+      fi
+
+    - docker build -t "$CI_IMAGE" ./microservices/ms-users/
+    - docker push "$CI_IMAGE"
+    
+#  rules:
+#    - if: $CI_COMMIT_BRANCH
+#      exists:
+#        - Dockerfile
+
+
+deploy:
+  image: docker:stable
+  stage: deploy
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache openssh-client
+    - chmod 400 $EC2_PASSWORD
+  #environment:
+  #  name: production
+  script:
+    - |
+      pwd
+      ls -la
+      ssh -o StrictHostKeyChecking=no -i "$EC2_PASSWORD" ${SSH_USER}@${appNode} 'mkdir -p /home/ec2-user/sa/${REGISTRY_REPOSITORY}'
+      scp -o StrictHostKeyChecking=no -i "$EC2_PASSWORD" "./microservices/${COMPONENT}/${COMPOSE_FILE}" "${SSH_USER}@${appNode}":/home/ec2-user/sa/${REGISTRY_RESPOSITORY}/    
+      ssh -o StrictHostKeyChecking=no -i "$EC2_PASSWORD" ${SSH_USER}@${appNode} "cd /home/ec2-user/sa/${REGISTRY_RESPOSITORY}/
+        echo $CI_REGISTRY_PASSWORD
+        echo $CI_REGISTRY
+        echo $CI_REGISTRY_USER
+        echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+        docker pull ${CI_IMAGE}
+        export IMAGE=${CI_IMAGE}
+        export KEYCLOAK_USER=${KEYCLOAK_USER}
+        export KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
+        export DB_PASSWORD=${DB_PASSWORD}
+        export KEYCLOAK_SECRET=${KEYCLOAK_SECRET}
+        export KEYCLOAK_REALM=${KEYCLOAK_REALM}
+        export ROOT_PASSWORD=${ROOT_PASSWORD}
+        export DB_PASSWORD=$DB_PASSWORD
+        export KEYCLOAK_SECRET=$KEYCLOAK_SECRET
+        export KEYCLOAK_REALM=$KEYCLOAK_REALM
+        export KEYCLOAK_USER=$KEYCLOAK_USER
+        export KEYCLOAK_PASSWORD=$KEYCLOAK_PASSWORD
+        export MS_USERS_DNS=$MS_USERS_DNS
+        export MS_ACCOUNTS_DNS=$MS_ACCOUNTS_DNS
+        export ROOT_PASSWORD=$ROOT_PASSWORD
+        export KEYCLOAK_URL=$KEYCLOAK_URL
+        export SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL
+        docker stack deploy -c $COMPOSE_FILE --with-registry-auth ${DEPLOY_NAME}"
+
+#  rules:
+#    - if: $CI_COMMIT_BRANCH
+#      exists:
+#        - $COMPOSE_FILE
+#docker stack deploy -c $COMPOSE_FILE --with-registry-auth ${DEPLOY_NAME
+
+      
