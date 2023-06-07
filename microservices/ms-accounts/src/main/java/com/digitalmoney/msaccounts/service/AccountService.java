@@ -3,10 +3,9 @@ package com.digitalmoney.msaccounts.service;
 import com.digitalmoney.msaccounts.application.dto.AccountCreationDTO;
 import com.digitalmoney.msaccounts.application.dto.AccountUpdateDTO;
 import com.digitalmoney.msaccounts.application.dto.UserAccountDTO;
-import com.digitalmoney.msaccounts.application.exception.AccountBadRequestException;
-import com.digitalmoney.msaccounts.application.exception.AccountInternalServerException;
-import com.digitalmoney.msaccounts.application.exception.AccountNotFoundException;
-import com.digitalmoney.msaccounts.application.exception.AccountUnauthorizedException;
+import com.digitalmoney.msaccounts.application.exception.BadRequestException;
+import com.digitalmoney.msaccounts.application.exception.InternalServerException;
+import com.digitalmoney.msaccounts.application.exception.NotFoundException;
 import com.digitalmoney.msaccounts.persistency.entity.Account;
 import com.digitalmoney.msaccounts.persistency.repository.AccountRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,47 +34,50 @@ public class AccountService {
         return repository.findById(accountId).orElse(null);
     }
 
-    public AccountCreationDTO createAccount(UserAccountDTO userDetails) throws AccountInternalServerException {
+    public AccountCreationDTO createAccount(UserAccountDTO userDetails) throws InternalServerException {
         Account accountToStore = new Account();
         accountToStore.setUserId(userDetails.user_id());
         accountToStore.setCvu(generateCVU(userDetails.dni()));
         accountToStore.setAlias(generateAlias(userDetails.dni()));
+        accountToStore.setBalance(0.0);
 
         return mapper.convertValue(repository.save(accountToStore), AccountCreationDTO.class);
     }
 
-    public Account findAccountByUserID(String sid) throws AccountNotFoundException, AccountUnauthorizedException, AccountBadRequestException {
+    public Account findAccountByUserID(String sid) throws NotFoundException, BadRequestException {
         Long id = validateID(sid);
 
         Optional<Account> accountFound = repository.findByUserId(id);
 
         if (!accountFound.isPresent()) {
-            throw new AccountNotFoundException("the account with user id " + id + " was not found");
+            throw new NotFoundException("the account for user id " + id + " was not found");
         }
-
-        //TODO: this validation must be modified once we have the api gateway
-
-        /*//check if the user who did the request is the correct one
-        String emailReq = ((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        log.error(emailReq);
-        log.error(userFound.get().getEmail());
-        if (!userFound.get().getEmail().equals(emailReq)) {
-            throw new UserUnauthorizedException("you can only request your user details");
-        }*/
 
         return accountFound.get();
     }
 
-    public Account updateAccount(String id, AccountUpdateDTO accountUpdates) throws AccountNotFoundException, AccountUnauthorizedException, AccountBadRequestException, AccountInternalServerException {
-        Account accountFound = findAccountByUserID(id);
+    public Account findAccountByID(String id) throws NotFoundException, BadRequestException {
+        Long aid = validateID(id);
+
+        Optional<Account> accountFound = repository.findById(aid);
+
+        if (!accountFound.isPresent()) {
+            throw new NotFoundException("the account with id " + aid + " was not found");
+        }
+
+        return accountFound.get();
+    }
+
+    public Account updateAccount(String id, AccountUpdateDTO accountUpdates) throws NotFoundException, BadRequestException, InternalServerException {
+        Account accountFound = findAccountByID(id);
 
         Optional<Account> accAlias = repository.findByAlias(accountUpdates.alias());
         if (accAlias.isPresent()) {
-            throw new AccountBadRequestException("the alias is already used by another user");
+            throw new BadRequestException("the alias is already used by another user");
         }
 
         if (!validateAlias(accountUpdates.alias())){
-            throw new AccountBadRequestException("the alias cannot include uppercase, numbers and the correct format is example.for.alias");
+            throw new BadRequestException("the alias is not valid. The correct format is example.for.alias");
         }
 
         accountFound.setAlias(accountUpdates.alias());
@@ -83,13 +85,13 @@ public class AccountService {
         try {
             repository.save(accountFound);
         } catch (Exception e) {
-            throw new AccountInternalServerException(e.getMessage());
+            throw new InternalServerException(e.getMessage());
         }
 
         return accountFound;
     }
 
-    private String generateAlias(String dni) throws AccountInternalServerException {
+    private String generateAlias(String dni) throws InternalServerException {
         try {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, List<String>> data = mapper.readValue(new File("words.json"), Map.class);
@@ -105,7 +107,7 @@ public class AccountService {
         } catch (IOException e) {
             log.error("Error reading words file", e);
         }
-        throw new AccountInternalServerException("Could not generate alias. Try again later.");
+        throw new InternalServerException("Could not generate alias. Try again later.");
     }
 
     private String generateCVU(String DNI) {
@@ -113,11 +115,11 @@ public class AccountService {
         return cvuService.generateCVU();
     }
 
-    public Long validateID(String id) throws AccountBadRequestException {
+    public Long validateID(String id) throws BadRequestException {
         try {
             return Long.parseLong(id);
         } catch (NumberFormatException e) {
-            throw new AccountBadRequestException("the id must be numeric");
+            throw new BadRequestException("the id must be numeric");
         }
     }
 

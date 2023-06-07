@@ -2,6 +2,7 @@ package com.digitalmoney.msaccounts.persistency.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,8 @@ public class Card {
     private Long id;
 
     @NotNull(message = "Card number is mandatory")
-    @Column(name = "card_number", unique = true, length = 16)
+    @Size(min = 14, max = 18, message = "Card number is invalid")
+    @Column(name = "card_number", unique = true)
     private String cardNumber;
 
     @NotNull(message = "Card holder is mandatory")
