@@ -2,6 +2,7 @@ package com.digitalmoney.msaccounts.controller;
 
 import com.digitalmoney.msaccounts.application.dto.*;
 import com.digitalmoney.msaccounts.persistency.dto.TransactionResponseDTO;
+import com.digitalmoney.msaccounts.persistency.dto.TransferenceRequest;
 import com.digitalmoney.msaccounts.persistency.entity.Account;
 import com.digitalmoney.msaccounts.persistency.entity.Card;
 import com.digitalmoney.msaccounts.service.AccountService;
@@ -99,6 +100,15 @@ public class AccountController {
     @GetMapping("{id}/transactions")
     public List<TransactionResponseDTO> getMyLastFiveTransactions(@PathVariable Long id) {
         return getAllMyTransactions(id, 0, 5).getContent();
+    }
+
+    @PostMapping("/{id}/transferences")
+    public ResponseEntity<?> createTransactionFromCard (@RequestBody TransferenceRequest transferenceRequest) {
+
+
+
+        return null;
+
     }
 
 }
