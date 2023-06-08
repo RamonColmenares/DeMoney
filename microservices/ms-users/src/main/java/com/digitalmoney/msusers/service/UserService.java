@@ -5,11 +5,10 @@ import com.digitalmoney.msusers.application.exception.UserBadRequestException;
 import com.digitalmoney.msusers.application.exception.UserNotFoundException;
 import com.digitalmoney.msusers.application.exception.UserInternalServerException;
 import com.digitalmoney.msusers.application.exception.UserUnauthorizedException;
-import com.digitalmoney.msusers.application.dto.AccountCreationDTO;
+import com.digitalmoney.msusers.application.dto.AccountDTO;
 import com.digitalmoney.msusers.application.dto.UserAccountDTO;
 import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
-import com.digitalmoney.msusers.application.dto.UserRegisterResponseDTO;
-import com.digitalmoney.msusers.application.exception.UserRegisterException;
+import com.digitalmoney.msusers.application.dto.UserResponseDTO;
 import com.digitalmoney.msusers.persistency.entity.User;
 import com.digitalmoney.msusers.persistency.repository.UserRepository;
 import com.digitalmoney.msusers.service.feign.AccountFeignService;
@@ -32,7 +31,7 @@ public class UserService {
     private final AccountFeignService accountFeignService;
     private final KeycloakService keycloakService;
 
-    public UserRegisterResponseDTO createUser(UserRegisterDTO user) throws UserInternalServerException {
+    public UserResponseDTO createUser(UserRegisterDTO user) throws UserInternalServerException {
          User userToStore = mapper.convertValue(user, User.class);
          BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
          userToStore.setPassword(passwordEncoder.encode(userToStore.getPassword()));
@@ -40,7 +39,7 @@ public class UserService {
 
          UserAccountDTO accountToCreate = new UserAccountDTO(userStored.getId(), userStored.getDni());
 
-         AccountCreationDTO account;
+         AccountDTO account;
          try {
              account = accountFeignService.createAccount(accountToCreate).getBody();
          } catch (Exception e) {
@@ -49,18 +48,17 @@ public class UserService {
              throw new UserInternalServerException(e.getMessage());
          }
 
-         return new UserRegisterResponseDTO(
+         return new UserResponseDTO(
                  userStored.getId(),
                  userStored.getFirstName(),
                  userStored.getLastName(),
                  userStored.getDni(),
                  userStored.getEmail(),
                  userStored.getPhone(),
-                 account.getCvu(),
-                 account.getAlias());
+                 account);
     }
 
-    public User findUserByID(String id) throws UserNotFoundException, UserUnauthorizedException, UserBadRequestException {
+    public UserResponseDTO findUserByID(String id) throws UserNotFoundException, UserUnauthorizedException, UserBadRequestException, UserInternalServerException {
         validateID(id);
 
         Optional<User> userFound = userRepository.findById(id);
@@ -77,11 +75,29 @@ public class UserService {
             throw new UserUnauthorizedException("you can only request your user details");
         }
 
-        return userFound.get();
+        User user = userFound.get();
+
+        AccountDTO account;
+        try {
+            account = accountFeignService.findAccountByUserId(user.getId()).getBody();
+        } catch (Exception e) {
+            throw new UserInternalServerException(e.getMessage());
+        }
+
+        return new UserResponseDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getDni(),
+                user.getEmail(),
+                user.getPhone(),
+                account);
     }
 
-    public User updateUser(String id, UserUpdateDTO userUpdates) throws UserNotFoundException, UserUnauthorizedException, UserBadRequestException, UserInternalServerException {
-        User userFound = findUserByID(id);
+    public UserUpdateResponseDTO updateUser(String id, UserUpdateDTO userUpdates) throws UserNotFoundException, UserUnauthorizedException, UserBadRequestException, UserInternalServerException {
+        validateID(id);
+
+        User userFound = userRepository.findById(id).get();
         String keycloakEmail = userFound.getEmail();
 
         if (userUpdates.firstName() != null && !userUpdates.firstName().isEmpty()){
@@ -122,6 +138,7 @@ public class UserService {
         try {
             userRepository.save(userFound);
         } catch (Exception e) {
+            log.error("user not updated, error:", e);
             throw new UserInternalServerException(e.getMessage());
         }
 
@@ -134,7 +151,13 @@ public class UserService {
             throw new UserInternalServerException(response.getStatusInfo().toString());
         }
 
-        return userFound;
+        return new UserUpdateResponseDTO(
+                userFound.getId(),
+                userFound.getFirstName(),
+                userFound.getLastName(),
+                userFound.getDni(),
+                userFound.getEmail(),
+                userFound.getPhone());
     }
 
     public List<User> findAll() {

@@ -1,14 +1,15 @@
 package com.digitalmoney.msaccounts.service;
 
 import com.digitalmoney.msaccounts.application.dto.CardDTO;
-import com.digitalmoney.msaccounts.application.exception.ResourceNotFoundException;
-import com.digitalmoney.msaccounts.application.exception.AlreadyExistsException;
+import com.digitalmoney.msaccounts.application.dto.CardResponseDTO;
+import com.digitalmoney.msaccounts.application.exception.BadRequestException;
+import com.digitalmoney.msaccounts.application.exception.InternalServerException;
 import com.digitalmoney.msaccounts.application.exception.NotFoundException;
 import com.digitalmoney.msaccounts.persistency.entity.Account;
 import com.digitalmoney.msaccounts.persistency.entity.Card;
-import com.digitalmoney.msaccounts.persistency.repository.AccountRepository;
 import com.digitalmoney.msaccounts.persistency.repository.CardRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,7 @@ import java.util.Optional;
 public class CardService {
     private final CardRepository cardRepository;
     private final AccountService accountService;
-
-
+    private final CVVService cvvService;
 
     ObjectMapper mapper;
 
@@ -30,56 +30,63 @@ public class CardService {
         return cardRepository.findAll();
     }
 
-    public List<CardDTO> findAllByAccountId(Long accountId) {
-        List<Card> cards = cardRepository.findAllByAccountId(accountId);
-        List<CardDTO> cardDTOS = new ArrayList<>();
-        for (Card card: cards) {
-            CardDTO cardDTO = new CardDTO(card.getCardNumber(), card.getCardHolder(), card.getExpirationDate(), card.getCvv());
-            cardDTOS.add(cardDTO);
-        }
-        return cardDTOS;
-
-    }
-
-    public CardDTO findByIdAndAccountId(Long cardId, Long accountId) throws ResourceNotFoundException {
-        Card card = cardRepository.findByIdAndAccountId(cardId, accountId);
-        if(card != null) {
-            return new CardDTO(card.getCardNumber(), card.getCardHolder(), card.getExpirationDate(), card.getCvv());
-        } else {
-            throw new ResourceNotFoundException("Card not found");
-        }
-
-    }
-
-    public void deleteCardByIdAndAccountId(Long accountId, Long cardId) throws Exception {
-        Optional<CardDTO> optionalCardDTO = Optional.ofNullable(findByIdAndAccountId(accountId, cardId));
-        if (optionalCardDTO.isPresent()) {
-            cardRepository.deleteById(cardId);
-        } else {
-            throw new ResourceNotFoundException("Card not found");
-        }
-    }
-
     public Card findByCardNumber(String cardNumber) {
         return cardRepository.findByCardNumber(cardNumber).orElse(null);
     }
 
-    public Card addCard(Long accountId, CardDTO cardDTO) throws NotFoundException, AlreadyExistsException {
+    public Card createCard(CardDTO cardDTO) throws Exception {
+        return new Card(null, cardDTO.cardNumber(), cardDTO.cardHolder(), cardDTO.expirationDate(), cvvService.cryptCVV(cardDTO.cvv(), cardDTO.cardNumber()), null);
+    }
+
+    public Card addCard(Long accountId, CardDTO cardDTO) throws NotFoundException, InternalServerException, BadRequestException {
         Account account = accountService.findById(accountId);
         if (account == null) {
             throw new NotFoundException("No account was found with the specified ID");
         }
         if (findByCardNumber(cardDTO.cardNumber()) != null) {
-            throw new AlreadyExistsException("A card with the specified card number already exists");
+            throw new BadRequestException("A card with the specified card number already exists");
         }
 
-        Card card = createCard(cardDTO);
-        card.setAccount(account);
+        Card card;
+        try {
+            card = createCard(cardDTO);
+            card.setAccount(account);
+            cardRepository.save(card);
+        }catch (ValidationException e){
+            throw new BadRequestException("Card number is invalid");
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new InternalServerException("there was a problem adding your card, please try again later");
+        }
 
-        return cardRepository.save(card);
+        return card;
     }
 
-    public Card createCard(CardDTO cardDTO){
-        return new Card(null, cardDTO.cardNumber(), cardDTO.cardHolder(), cardDTO.expirationDate(), cardDTO.cvv(), null);
+    public List<CardResponseDTO> findAllByAccountId(Long accountId) {
+        List<Card> cards = cardRepository.findAllByAccountId(accountId);
+        List<CardResponseDTO> cardDTOS = new ArrayList<>();
+        for (Card card: cards) {
+            CardResponseDTO cardDTO = new CardResponseDTO(card.getCardNumber(), card.getCardHolder(), card.getExpirationDate());
+            cardDTOS.add(cardDTO);
+        }
+        return cardDTOS;
+    }
+
+    public CardResponseDTO findByIdAndAccountId(Long cardId, Long accountId) throws NotFoundException {
+        Card card = cardRepository.findByIdAndAccountId(cardId, accountId);
+        if(card != null) {
+            return new CardResponseDTO(card.getCardNumber(), card.getCardHolder(), card.getExpirationDate());
+        } else {
+            throw new NotFoundException("Card not found");
+        }
+    }
+
+    public void deleteCardByIdAndAccountId(Long accountId, Long cardId) throws NotFoundException {
+        Optional<CardResponseDTO> optionalCardDTO = Optional.ofNullable(findByIdAndAccountId(cardId, accountId));
+        if (optionalCardDTO.isPresent()) {
+            cardRepository.deleteById(cardId);
+        } else {
+            throw new NotFoundException("Card not found");
+        }
     }
 }

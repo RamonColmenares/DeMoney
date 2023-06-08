@@ -3,7 +3,7 @@ package com.digitalmoney.msusers.controller;
 import com.digitalmoney.msusers.application.dto.UserLoginDTO;
 import com.digitalmoney.msusers.application.dto.UserLoginResponseDTO;
 import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
-import com.digitalmoney.msusers.application.dto.UserRegisterResponseDTO;
+import com.digitalmoney.msusers.application.dto.UserResponseDTO;
 import com.digitalmoney.msusers.config.security.TokenProvider;
 import com.digitalmoney.msusers.application.dto.UserUpdateDTO;
 import com.digitalmoney.msusers.application.exception.UserBadRequestException;
@@ -54,7 +54,7 @@ public class UserController {
     public ResponseEntity<?> register(@RequestBody @Valid UserRegisterDTO user) {
         try (Response response = keycloakService.createInKeycloak(user)) {
             if (response.getStatus() == HttpStatus.CREATED.value()) {
-                UserRegisterResponseDTO saved = userService.createUser(user);
+                UserResponseDTO saved = userService.createUser(user);
                 keycloakService.addDbUserId(saved.id(), saved.email());
                 return ResponseEntity.ok().body(saved);
             }
@@ -98,11 +98,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findByID(@PathVariable String id) throws UserNotFoundException, UserBadRequestException, UserUnauthorizedException {
+    public ResponseEntity<?> findByID(@PathVariable String id) throws UserNotFoundException, UserBadRequestException, UserUnauthorizedException, UserInternalServerException {
         return ResponseEntity.ok().body(userService.findUserByID(id));
     }
 
-    // CHEQUEAR, UNA VEZ QUE SE ACTUALIZA EMAIL EN KEYCLOAK NO ME DEJA LOGUEARME -> responseDTO is null
     @PatchMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable String id, @RequestBody @Valid UserUpdateDTO user) throws UserNotFoundException, UserBadRequestException, UserUnauthorizedException, UserInternalServerException {
         return ResponseEntity.ok().body(userService.updateUser(id, user));
