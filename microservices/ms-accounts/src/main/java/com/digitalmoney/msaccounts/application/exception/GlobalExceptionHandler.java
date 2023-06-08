@@ -44,4 +44,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> unauthorizedError(UnauthorizedException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
+
+    @ExceptionHandler({SecurityException.class})
+    public ResponseEntity<String> securityException(SecurityException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<String> unmanagedException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
 }
