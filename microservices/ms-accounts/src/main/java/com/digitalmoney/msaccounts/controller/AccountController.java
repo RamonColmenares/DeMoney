@@ -12,6 +12,7 @@ import com.digitalmoney.msaccounts.persistency.entity.Card;
 import com.digitalmoney.msaccounts.persistency.entity.Transaction;
 import com.digitalmoney.msaccounts.service.AccountService;
 import com.digitalmoney.msaccounts.service.CardService;
+import com.digitalmoney.msaccounts.service.SecurityService;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import com.digitalmoney.msaccounts.application.exception.AccountBadRequestException;
@@ -37,6 +38,7 @@ public class AccountController {
     private final AccountService service;
     private final TransactionService transactionService;
     private final CardService cardService;
+    private final SecurityService securityService;
 
     @GetMapping("/test-db")
     public List<Account> testDb() {
@@ -162,14 +164,17 @@ public class AccountController {
         }
     }
 
-    @GetMapping("{id}/transactions/all")
-    public Page<TransactionResponseDTO> getAllMyTransactions(@PathVariable Long id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
-        return transactionService.getTransactionByAccountId(id, page, size);
+    @GetMapping("{id}/activity")
+    public ResponseEntity<?> getAllMyTransactions(@PathVariable Long id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        if(!securityService.isMyAccount(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
+        }
+        return ResponseEntity.ok(transactionService.getTransactionByAccountId(id, page, size));
     }
 
     @GetMapping("{id}/transactions")
-    public List<TransactionResponseDTO> getMyLastFiveTransactions(@PathVariable Long id) {
-        return getAllMyTransactions(id, 0, 5).getContent();
+    public ResponseEntity<?> getMyLastFiveTransactions(@PathVariable Long id) {
+        return getAllMyTransactions(id, 0, 5);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.digitalmoney.msaccounts.config.security;
 
+import com.digitalmoney.msaccounts.config.filters.JWTExtractionFilter;
 import com.digitalmoney.msaccounts.config.filters.LoggingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.addFilterBefore(new LoggingFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(new LoggingFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JWTExtractionFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http
                 .csrf().disable()

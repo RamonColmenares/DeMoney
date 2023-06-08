@@ -8,6 +8,7 @@ import com.digitalmoney.msaccounts.application.exception.AccountInternalServerEx
 import com.digitalmoney.msaccounts.application.exception.AccountNotFoundException;
 import com.digitalmoney.msaccounts.application.exception.AccountUnauthorizedException;
 import com.digitalmoney.msaccounts.persistency.entity.Account;
+import com.digitalmoney.msaccounts.persistency.entity.Transaction;
 import com.digitalmoney.msaccounts.persistency.repository.AccountRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;

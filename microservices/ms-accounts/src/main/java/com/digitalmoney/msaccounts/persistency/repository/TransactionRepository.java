@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query("SELECT t from Transaction t where t.account.id = :idAccount order by t.transactionDate desc")
+    @Query("SELECT new com.digitalmoney.msaccounts.application.dto.TransactionActivityDTO(t.amount, t.transactionDate, t.id, t.transactionType) from Transaction t where t.account.id = :idAccount order by t.transactionDate desc")
     Page<Transaction> getTransactionByAccountId(@RequestParam Long idAccount, Pageable pageable);
 }

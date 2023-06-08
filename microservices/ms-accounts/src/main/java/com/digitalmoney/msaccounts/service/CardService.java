@@ -42,8 +42,10 @@ public class CardService {
     }
 
     public CardDTO findByIdAndAccountId(Long cardId, Long accountId) throws ResourceNotFoundException {
-
+        System.out.println(cardId);
+        System.out.println(accountId);
         Card card = cardRepository.findByIdAndAccountId(cardId, accountId);
+        System.out.println(card);
         if(card != null) {
             return new CardDTO(card.getCardNumber(), card.getCardHolder(), card.getExpirationDate(), card.getCvv());
         } else {

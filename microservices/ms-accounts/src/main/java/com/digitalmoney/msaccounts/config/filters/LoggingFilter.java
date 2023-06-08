@@ -32,16 +32,16 @@ public class LoggingFilter extends GenericFilterBean {
         if (authentication == null) {
             username = "";
         } else {
-            username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+            username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }
 
         String ip = request.getRemoteAddr();
-        LOGGER.info("Before request [{} {}] [{}] {}", method, endpoint, username, ip);
+        LOGGER.info("Before request [{} {}] [userId: {}] {}", method, endpoint, username, ip);
 
         filterChain.doFilter(servletRequest, servletResponse);
 
         // After request logging
         String responseStatus = String.valueOf(response.getStatus());
-        LOGGER.info("After request [{} {}] [{}] [{}]", method, endpoint, username, responseStatus);
+        LOGGER.info("After request [{} {}] [userId: {}] [{}]", method, endpoint, username, responseStatus);
     }
 }
