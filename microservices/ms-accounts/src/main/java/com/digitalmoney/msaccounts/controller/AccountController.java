@@ -48,9 +48,9 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<?> findByUserID(@PathVariable String id) throws NotFoundException, BadRequestException, UnauthorizedException {
-        return ResponseEntity.ok().body(service.findAccountByUserID(id));
+    @GetMapping("/user/{uid}")
+    public ResponseEntity<?> findByUserID(@PathVariable String uid) throws NotFoundException, BadRequestException, UnauthorizedException {
+        return ResponseEntity.ok().body(service.findAccountByUserID(uid));
     }
 
     @GetMapping("/{id}")
@@ -94,16 +94,27 @@ public class AccountController {
     }
 
     @GetMapping("{id}/activity")
-    public ResponseEntity<?> getAllMyTransactions(@PathVariable Long id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+    public ResponseEntity<?> getAllMyTransactions(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) Integer min,
+            @RequestParam(required = false) Integer max) throws InternalServerException, BadRequestException {
         if(!securityService.isMyAccount(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
+        }
+        if (min != null && max != null){
+            return ResponseEntity.ok(transactionService.getTransactionByAmount(id, min, max));
         }
         return ResponseEntity.ok(transactionService.getTransactionByAccountId(id, page, size));
     }
 
     @GetMapping("{id}/transactions")
     public ResponseEntity<?> getMyLastFiveTransactions(@PathVariable Long id) {
-        return getAllMyTransactions(id, 0, 5);
+        if(!securityService.isMyAccount(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
+        }
+        return ResponseEntity.ok(transactionService.getTransactionByAccountId(id, 0, 5));
     }
 
 }

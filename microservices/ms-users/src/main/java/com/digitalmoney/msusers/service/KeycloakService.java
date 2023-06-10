@@ -113,6 +113,7 @@ public class KeycloakService {
             newUserRepresentation.setLastName(userRepresentation.getLastName());
             newUserRepresentation.setEnabled(userRepresentation.isEnabled());
             newUserRepresentation.setRealmRoles(userRepresentation.getRealmRoles());
+            newUserRepresentation.setAttributes(userRepresentation.getAttributes());
 
             CredentialRepresentation credential = new CredentialRepresentation();
             credential.setType(CredentialRepresentation.PASSWORD);
