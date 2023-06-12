@@ -5,13 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -29,33 +25,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(fieldErrors.stream().map(DefaultMessageSourceResolvable::getDefaultMessage));
     }
 
-    @ExceptionHandler({ResourceNotFoundException.class})
-    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<String> notFoundError(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity<String> handleBadRequestException(BadRequestException ex) {
+    public ResponseEntity<String> badRequestError(BadRequestException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
-    @ExceptionHandler({AccountNotFoundException.class})
-    public ResponseEntity<String> notFoundError(AccountNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
-
-    @ExceptionHandler({AccountBadRequestException.class})
-    public ResponseEntity<String> badRequestError(AccountBadRequestException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
-
-    @ExceptionHandler({AccountInternalServerException.class})
-    public ResponseEntity<String> internalServerError(AccountInternalServerException ex) {
+    @ExceptionHandler({InternalServerException.class})
+    public ResponseEntity<String> internalServerError(InternalServerException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 
-    @ExceptionHandler({AccountUnauthorizedException.class})
-    public ResponseEntity<String> unauthorizedError(AccountUnauthorizedException ex) {
+    @ExceptionHandler({UnauthorizedException.class})
+    public ResponseEntity<String> unauthorizedError(UnauthorizedException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
