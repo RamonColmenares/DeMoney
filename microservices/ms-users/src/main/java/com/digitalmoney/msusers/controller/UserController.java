@@ -1,11 +1,7 @@
 package com.digitalmoney.msusers.controller;
 
-import com.digitalmoney.msusers.application.dto.UserLoginDTO;
-import com.digitalmoney.msusers.application.dto.UserLoginResponseDTO;
-import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
-import com.digitalmoney.msusers.application.dto.UserRegisterResponseDTO;
+import com.digitalmoney.msusers.application.dto.*;
 import com.digitalmoney.msusers.config.security.TokenProvider;
-import com.digitalmoney.msusers.application.dto.UserUpdateDTO;
 import com.digitalmoney.msusers.application.exception.UserBadRequestException;
 import com.digitalmoney.msusers.application.exception.UserInternalServerException;
 import com.digitalmoney.msusers.application.exception.UserNotFoundException;
@@ -128,5 +124,11 @@ public class UserController {
         System.out.println(token);
         System.out.println(tokenProvider.isValid(token));
         return tokenProvider.isValid(token);
+    }
+
+    @PostMapping("/activate")
+    public ResponseEntity<?> validateUser(@RequestBody UserActivateDTO body, @RequestParam String hash) {
+        userService.activate(body.password(), hash);
+        return ResponseEntity.noContent().build();
     }
 }

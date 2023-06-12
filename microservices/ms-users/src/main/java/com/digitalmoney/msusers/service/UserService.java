@@ -148,4 +148,11 @@ public class UserService {
             throw new UserBadRequestException("the id must be numeric");
         }
     }
+
+    public void activate(String password, String hash) {
+        User user = userRepository.findByHash(hash);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
 }
