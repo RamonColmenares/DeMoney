@@ -8,7 +8,6 @@ import com.digitalmoney.msaccounts.persistency.entity.Card;
 import com.digitalmoney.msaccounts.service.AccountService;
 import com.digitalmoney.msaccounts.service.CardService;
 import com.digitalmoney.msaccounts.service.SecurityService;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import com.digitalmoney.msaccounts.application.exception.BadRequestException;
 import com.digitalmoney.msaccounts.application.exception.InternalServerException;
@@ -19,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.digitalmoney.msaccounts.service.TransactionService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -108,11 +106,23 @@ public class AccountController {
     }
 
     @PostMapping("/{id}/transferences")
-    public ResponseEntity<?> createTransactionFromCard (@RequestBody TransferenceRequest transferenceRequest) {
+    public ResponseEntity<?> createTransactionFromCard (@RequestBody TransferenceRequest transferenceRequest, @PathVariable Long id) {
+        try {
+            if (securityService.isMyAccount(id)) {
+                TransactionResponseDTO transaction = transactionService.createTransactionFromCard(transferenceRequest, service.findAccountByID(id.toString()));
+                if (cardService.findByIdAndAccountId(transferenceRequest.cardId(), id) != null) {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account does not belong to bearer.");
+            }
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
 
-
-
-        return null;
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
 
     }
 

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public record TransferenceRequest (
         BigDecimal transactionAmount,
-        LocalDateTime transactionDate,
         String destinationCvu,
-        String originCvu
+        String originCvu,
+        Long cardId
 ){}
