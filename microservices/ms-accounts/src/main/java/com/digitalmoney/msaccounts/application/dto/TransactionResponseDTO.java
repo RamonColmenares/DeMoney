@@ -1,4 +1,4 @@
-package com.digitalmoney.msaccounts.persistency.dto;
+package com.digitalmoney.msaccounts.application.dto;
 
 import com.digitalmoney.msaccounts.persistency.entity.Transaction;
 import lombok.Data;

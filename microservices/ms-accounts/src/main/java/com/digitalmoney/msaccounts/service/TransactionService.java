@@ -1,14 +1,18 @@
 package com.digitalmoney.msaccounts.service;
 
+import com.digitalmoney.msaccounts.application.dto.TransactionActivityDTO;
 import com.digitalmoney.msaccounts.application.exception.BadRequestException;
 import com.digitalmoney.msaccounts.application.exception.InternalServerException;
-import com.digitalmoney.msaccounts.persistency.dto.TransactionResponseDTO;
+import com.digitalmoney.msaccounts.application.dto.TransactionResponseDTO;
+import com.digitalmoney.msaccounts.application.utils.TransactionSpecification;
 import com.digitalmoney.msaccounts.persistency.entity.Transaction;
 import com.digitalmoney.msaccounts.persistency.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,61 +29,47 @@ public class TransactionService {
         return repository.findAll();
     }
 
-    public Page<TransactionResponseDTO> getTransactionByAccountId(Long idAccount, int page, int size) {
-        return repository.getTransactionByAccountId(idAccount, PageRequest.of(page, size, Sort.by("transactionDate")))
-                .map(this::convertToDto);
-    }
+    public List<TransactionActivityDTO> getTransactionsByAccountId(Long idAccount, int limit, Integer minAmount, Integer maxAmount, LocalDate startDate, LocalDate endDate, String transactionTypeString) throws BadRequestException {
+        Specification<Transaction> specification = Specification.where(null);
 
-    public TransactionResponseDTO getTransactionByAmount(Long idAccount, int min, int max) throws BadRequestException, InternalServerException {
-        if (min < 0) {
-            throw new BadRequestException("the minimum amount to search is 0");
+        if (idAccount == null) {
+            throw new BadRequestException("the account id is necessary to search transactions");
+        }
+        specification = specification.and(TransactionSpecification.findByAccountId(idAccount));
+
+        if ((minAmount != null && minAmount >= 0) && (maxAmount != null && maxAmount > 0)) {
+            specification = specification.and(TransactionSpecification.findByAmountRange(minAmount, maxAmount));
         }
 
-        Transaction transaction;
-        try {
-            transaction = repository.getTransactionByAmount(idAccount, min, max);
-        } catch (Exception e) {
-            throw new InternalServerException(e.getMessage());
+        if (startDate != null && endDate != null) {
+            specification = specification.and(TransactionSpecification.findByDateRange(startDate.atTime(LocalTime.MIDNIGHT), endDate.atTime(LocalTime.MAX)));
         }
 
-        return convertToDto(transaction);
-    }
-
-    public List<TransactionResponseDTO> getTransactionsByAccountIdAndDateRange(Long idAccount, LocalDate startDate, LocalDate endDate) throws InternalServerException {
-        LocalDateTime startDateTime = startDate.atTime(LocalTime.MIDNIGHT);
-        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
-
-        List<Transaction> transactions;
-        try {
-            transactions = repository.getTransactionByAccountIdAndDateRange(idAccount, startDateTime, endDateTime);
-        } catch (Exception e) {
-            throw new InternalServerException(e.getMessage());
+        if (transactionTypeString != null ) {
+            Transaction.TransactionType type;
+            try {
+                type = Transaction.TransactionType.valueOf(transactionTypeString);
+            }catch (IllegalArgumentException e){
+                throw new BadRequestException("transaction type is invalid");
+            }
+            specification = specification.and(TransactionSpecification.findByTransactionType(type));
         }
+
+        specification = specification.and(TransactionSpecification.orderByTransactionDateDesc());
+
+        Pageable pageable = PageRequest.of(0, limit);
+        List<Transaction> transactions = repository.findAll(specification, pageable);
+
+
         return transactions.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public List<TransactionResponseDTO> getTransactionsByAccountIdAndTransactionType(Long idAccount, String transactionTypeString) throws InternalServerException {
-        Transaction.TransactionType transactionType = Transaction.TransactionType.valueOf(transactionTypeString);
-
-        List<Transaction> transactions;
-        try {
-            transactions = repository.getTransactionsByAccountIdAndTransactionType(idAccount, transactionType);
-        } catch (Exception e) {
-            throw new InternalServerException(e.getMessage());
-        }
-        return transactions.stream().map(this::convertToDto).collect(Collectors.toList());
-    }
-
-    private TransactionResponseDTO convertToDto(Transaction transaction) {
+    private TransactionActivityDTO convertToDto(Transaction transaction) {
         // Convert Transaction to TransactionDTO
-        return new TransactionResponseDTO(
-                transaction.getAccount().getId(),
+        return new TransactionActivityDTO(
                 transaction.getAmount(),
                 transaction.getTransactionDate(),
-                transaction.getTransactionDescription(),
-                transaction.getDestinationCvu(),
                 transaction.getId(),
-                transaction.getOriginCvu(),
                 transaction.getTransactionType()
         );
     }

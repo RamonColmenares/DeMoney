@@ -102,35 +102,25 @@ public class AccountController {
     @GetMapping("{id}/activity")
     public ResponseEntity<?> getAllMyTransactions(
             @PathVariable Long id,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(required = false) Integer min,
-            @RequestParam(required = false) Integer max,
+            @RequestParam(defaultValue = "100") int limit,
+            @RequestParam(required = false) Integer minAmount,
+            @RequestParam(required = false) Integer maxAmount,
             @RequestParam(required = false) LocalDate startDate,
             @RequestParam(required = false) LocalDate endDate,
-            @RequestParam(required = false) String transactionType) throws InternalServerException, BadRequestException {
+            @RequestParam(required = false) String transactionType) throws BadRequestException {
 
         if(!securityService.isMyAccount(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
         }
-        if (min != null && max != null) {
-            return ResponseEntity.ok(transactionService.getTransactionByAmount(id, min, max));
-        }
-        if (startDate != null && endDate != null) {
-            return ResponseEntity.ok(transactionService.getTransactionsByAccountIdAndDateRange(id, startDate, endDate));
-        }
-        if (transactionType != null) {
-            return ResponseEntity.ok(transactionService.getTransactionsByAccountIdAndTransactionType(id, transactionType));
-        }
-        return ResponseEntity.ok(transactionService.getTransactionByAccountId(id, page, size));
+        return ResponseEntity.ok(transactionService.getTransactionsByAccountId(id, limit, minAmount, maxAmount, startDate, endDate, transactionType));
     }
 
     @GetMapping("{id}/transactions")
-    public ResponseEntity<?> getMyLastFiveTransactions(@PathVariable Long id) {
+    public ResponseEntity<?> getMyLastFiveTransactions(@PathVariable Long id) throws BadRequestException {
         if(!securityService.isMyAccount(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
         }
-        return ResponseEntity.ok(transactionService.getTransactionByAccountId(id, 0, 5));
+        return ResponseEntity.ok(transactionService.getTransactionsByAccountId(id, 5, 0, 0, null, null, null));
     }
 
 }
