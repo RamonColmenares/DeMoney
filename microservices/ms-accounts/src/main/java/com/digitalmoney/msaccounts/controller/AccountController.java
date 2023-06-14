@@ -101,6 +101,14 @@ public class AccountController {
         return ResponseEntity.ok(transactionService.getTransactionByAccountId(id, page, size));
     }
 
+    @GetMapping("{id}/activity/{transactionID}")
+    public ResponseEntity<?> getDetailOfTransaction(@PathVariable Long id, @PathVariable Long transactionID) throws NotFoundException, BadRequestException {
+        if(!securityService.isMyAccount(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
+        }
+        return ResponseEntity.ok(transactionService.getTransactionDetail(id, transactionID));
+    }
+
     @GetMapping("{id}/transactions")
     public ResponseEntity<?> getMyLastFiveTransactions(@PathVariable Long id) {
         return getAllMyTransactions(id, 0, 5);

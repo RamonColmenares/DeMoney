@@ -1,5 +1,7 @@
 package com.digitalmoney.msaccounts.service;
 
+import com.digitalmoney.msaccounts.application.exception.BadRequestException;
+import com.digitalmoney.msaccounts.application.exception.NotFoundException;
 import com.digitalmoney.msaccounts.persistency.dto.TransactionResponseDTO;
 import com.digitalmoney.msaccounts.persistency.entity.Transaction;
 import com.digitalmoney.msaccounts.persistency.repository.TransactionRepository;
@@ -9,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service @AllArgsConstructor
 public class TransactionService {
@@ -31,5 +35,17 @@ public class TransactionService {
                 transaction.getOriginCvu(),
                 transaction.getTransactionType()
         );
+    }
+
+    public Transaction getTransactionDetail(Long id, Long transactionID) throws NotFoundException, BadRequestException {
+        Transaction transaction = repository.findById(transactionID).orElse(null);
+        if (transaction == null) {
+            throw new NotFoundException("Transaction doesnt exist.");
+        }
+        if (!Objects.equals(transaction.getAccount().getId(), id)) {
+            throw new BadRequestException("Transaction doesnt belong to the account.");
+        }
+
+        return transaction;
     }
 }
