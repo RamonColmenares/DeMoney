@@ -28,5 +28,15 @@ trigger-accounts-pipeline-job:
       - microservices/ms-accounts/**/**
     - when: always
 
+trigger-gateway-pipeline-job:
+  stage: provision
+  trigger:
+    include: microservices/gateway/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+      - microservices/gateway/**/**
+    - when: always
+
 
 

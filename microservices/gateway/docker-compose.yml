@@ -3,7 +3,7 @@ services:
   ms-users:
     image: ${IMAGE}
     ports:
-      - "8081:8081"
+      - "80:8083"
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
