@@ -1,5 +1,8 @@
 package com.digitalmoney.msaccounts.service;
 
+import com.digitalmoney.msaccounts.application.dto.TransactionDetailDTO;
+import com.digitalmoney.msaccounts.application.exception.BadRequestException;
+import com.digitalmoney.msaccounts.application.exception.NotFoundException;
 import com.digitalmoney.msaccounts.persistency.dto.TransactionResponseDTO;
 import com.digitalmoney.msaccounts.persistency.entity.Transaction;
 import com.digitalmoney.msaccounts.persistency.repository.TransactionRepository;
@@ -10,9 +13,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service @AllArgsConstructor
 public class TransactionService {
     private final TransactionRepository repository;
+    private final ObjectMapper mapper;
 
     public Page<TransactionResponseDTO> getTransactionByAccountId(Long idAccount, int page, int size) {
         return repository.getTransactionByAccountId(idAccount, PageRequest.of(page, size, Sort.by("transactionDate")))
@@ -31,5 +37,17 @@ public class TransactionService {
                 transaction.getOriginCvu(),
                 transaction.getTransactionType()
         );
+    }
+
+    public TransactionDetailDTO getTransactionDetail(Long id, Long transactionID) throws NotFoundException, BadRequestException {
+        Transaction transaction = repository.findById(transactionID).orElse(null);
+        if (transaction == null) {
+            throw new NotFoundException("Transaction doesnt exist.");
+        }
+        if (!Objects.equals(transaction.getAccount().getId(), id)) {
+            throw new BadRequestException("Transaction doesnt belong to the account.");
+        }
+
+        return mapper.convertValue(transaction, TransactionDetailDTO.class);
     }
 }
