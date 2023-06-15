@@ -3,8 +3,8 @@ stages:
   - deploy 
 
 variables:
-  REGISTRY_REPOSITORY: "gateway" #nombre de microservicio
-  COMPONENT: "gateway"
+  REGISTRY_REPOSITORY: "ms-mails" #nombre de microservicio
+  COMPONENT: "ms-mails"
   TAG: "2.5.0"
   CI_REGISTRY: "registry-grupo5.local"
   CI_REGISTRY_USER: "grupo5"
@@ -63,9 +63,9 @@ docker-build:
         echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
       fi
 
-    - docker build -t "$CI_IMAGE" ./microservices/gateway/
+    - docker build -t "$CI_IMAGE" ./microservices/${COMPONENT}/
     - docker push "$CI_IMAGE"
-
+    
 #  rules:
 #    - if: $CI_COMMIT_BRANCH
 #      exists:
