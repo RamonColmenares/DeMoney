@@ -12,7 +12,7 @@ trigger-users-pipeline-job:
   stage: provision
   trigger:
     include: microservices/ms-users/.gitlab-ci.yml
-    strategy: run
+    strategy: depend
   rules:
     - changes:
       - microservices/ms-users/**/**
@@ -22,7 +22,7 @@ trigger-accounts-pipeline-job:
   stage: provision
   trigger:
     include: microservices/ms-accounts/.gitlab-ci.yml
-    strategy: run
+    strategy: depend
   rules:
     - changes:
       - microservices/ms-accounts/**/**
@@ -32,7 +32,7 @@ trigger-gateway-pipeline-job:
   stage: provision
   trigger:
     include: microservices/gateway/.gitlab-ci.yml
-    strategy: run
+    strategy: depend
   rules:
     - changes:
       - microservices/gateway/**/**
