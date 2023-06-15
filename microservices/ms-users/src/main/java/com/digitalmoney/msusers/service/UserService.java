@@ -35,7 +35,7 @@ public class UserService {
     private final MailFeignService mailFeignService;
 
     public UserResponseDTO createUser(UserRegisterDTO user) throws UserInternalServerException {
-         User userToStore = mapper.convertValue(user, User.class);
+        User userToStore = mapper.convertValue(user, User.class);
          // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
          // userToStore.setPassword(passwordEncoder.encode(userToStore.getPassword()));
         userToStore.setStatus(User.UserStatus.pending);
@@ -190,8 +190,66 @@ public class UserService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(password));
         user.setStatus(User.UserStatus.active);
-        user.setHash(null);
         userRepository.save(user);
         keycloakService.activate(user, password);
+    }
+
+    public UserUpdateResponseDTO sendRecoveryPasswordEmail(String email) throws UserNotFoundException, UserUnauthorizedException, UserBadRequestException, UserInternalServerException {
+
+        Optional<User> userFound = userRepository.findByEmail(email);
+
+        if (!userFound.isPresent()) {
+            throw new UserNotFoundException("the user with email " + email + " was not found");
+        }
+
+        //check if the user who did the request is the correct one
+        String emailReq = ((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        log.error(emailReq);
+        log.error(userFound.get().getEmail());
+        if (!userFound.get().getEmail().equals(emailReq)) {
+            throw new UserUnauthorizedException("you can only request your user details");
+        }
+
+        User user = userFound.get();
+
+        mailFeignService.sendRecoveryPasswordMail(user.getEmail(), user.getHash());
+
+        return new UserUpdateResponseDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getDni(),
+                user.getEmail(),
+                user.getPhone());
+    }
+
+    public UserUpdateResponseDTO updatePassword(UserUpdatePasswordDTO userUpdatePasswordDTO, String hash) throws UserNotFoundException, UserInternalServerException {
+
+        User userFound = userRepository.findByEmail(userUpdatePasswordDTO.email()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        String keycloakEmail = userFound.getEmail();
+
+        if (!userFound.getHash().equals(hash)) {
+            throw new UserNotFoundException("Incorrect hash");
+        }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        userFound.setPassword(passwordEncoder.encode(userUpdatePasswordDTO.password()));
+
+        try {
+            userRepository.save(userFound);
+        } catch (Exception e) {
+            log.error("User not updated, error:", e);
+            throw new UserInternalServerException(e.getMessage());
+        }
+
+        keycloakService.updatePassword(keycloakEmail, userUpdatePasswordDTO.password());
+
+        return new UserUpdateResponseDTO(
+                userFound.getId(),
+                userFound.getFirstName(),
+                userFound.getLastName(),
+                userFound.getDni(),
+                userFound.getEmail(),
+                userFound.getPhone());
     }
 }

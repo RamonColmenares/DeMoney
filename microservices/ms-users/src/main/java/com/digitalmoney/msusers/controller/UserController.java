@@ -26,6 +26,8 @@ import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
@@ -134,5 +136,28 @@ public class UserController {
     public ResponseEntity<?> validateUser(@RequestBody UserActivateDTO body, @RequestParam String hash) {
         userService.activate(body.password(), hash);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/update-password-email")
+    public ResponseEntity<?> sentUpdatePasswordEmail(@RequestParam("email") String email) {
+        try {
+            UserUpdateResponseDTO responseDTO = userService.sendRecoveryPasswordEmail(email);
+            return ResponseEntity.ok().body("Email sent for user " + responseDTO.email());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestBody UserUpdatePasswordDTO body, @RequestParam String hash) {
+        try {
+            UserUpdateResponseDTO responseDTO = userService.updatePassword(body, hash);
+            Map<String, Object> response = new HashMap<>();
+            response.put("data", responseDTO);
+            response.put("message", "Password updated successfully");
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 }

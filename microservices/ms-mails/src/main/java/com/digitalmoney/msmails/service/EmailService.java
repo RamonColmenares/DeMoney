@@ -1,5 +1,6 @@
 package com.digitalmoney.msmails.service;
 
+import com.digitalmoney.msmails.dto.UserUpdatePasswordDTO;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -29,4 +30,5 @@ public class EmailService {
             e.printStackTrace();
         }
     }
+
 }
