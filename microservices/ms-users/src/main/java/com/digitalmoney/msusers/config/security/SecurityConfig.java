@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/test-db").permitAll()
                         .requestMatchers(HttpMethod.GET, "/test-keycloak").permitAll()
                         .requestMatchers(HttpMethod.POST,"/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/activate").permitAll()
                         .requestMatchers(HttpMethod.POST, "/me/logout").authenticated()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/refresh-token").authenticated()

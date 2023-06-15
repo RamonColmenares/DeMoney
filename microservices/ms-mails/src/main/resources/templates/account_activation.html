@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to Our Virtual Wallet</title>
+    <style>
+        .email-content {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f8f8f8;
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            color: white;
+            background-color: #4caf50;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="email-content">
+    <h1>Welcome, <span th:text="${name}">Name</span>!</h1>
+    <p>
+        Thank you for registering with our virtual wallet service.
+        To activate your account and set up your password, please click on the link below:
+    </p>
+    <p>
+        <a th:href="${activation_link}" class="button">Activate my account</a>
+    </p>
+    <p>If you didn't register for our service, please ignore this email.</p>
+    <p>Regards,<br>The Virtual Wallet Team</p>
+</div>
+</body>
+</html>

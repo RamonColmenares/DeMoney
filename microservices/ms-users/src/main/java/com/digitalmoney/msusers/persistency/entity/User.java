@@ -35,7 +35,15 @@ public class User {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @NotBlank(message = "Password is mandatory")
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
+
+    private String hash;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+
+    public enum UserStatus {
+        active, inactive, pending, expired
+    }
 }
