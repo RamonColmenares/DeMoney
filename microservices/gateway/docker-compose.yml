@@ -1,19 +1,14 @@
 version: '3'
 services:
-  ms-users:
+  gateway:
     image: ${IMAGE}
     ports:
       - "80:8083"
     environment:
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      KEYCLOAK_URL: ${KEYCLOAK_URL}
-      KEYCLOAK_RESOURCE: user-app
-      KEYCLOAK_CREDENTIALS_SECRET: ${KEYCLOAK_SECRET}
-      KEYCLOAK_USERNAME: ${KEYCLOAK_USER}
-      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
-      SPRING_PROFILES_ACTIVE: prod
-      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+      MS_USERS_DNS: http://ms-users:8081
+      MS_ACCOUNTS_DNS: http://ms-accounts:8082
+    networks:
+      - podnet
 networks:
-  g5network:
-
+  podnet:
+    external: true

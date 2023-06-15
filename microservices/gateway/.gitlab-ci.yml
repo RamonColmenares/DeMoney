@@ -88,6 +88,6 @@ deploy:
         export ROOT_PASSWORD=$ROOT_PASSWORD
         export KEYCLOAK_URL=$KEYCLOAK_URL
         export SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL
-        docker stack deploy -c $COMPOSE_FILE --with-registry-auth ${DEPLOY_NAME}"
+        docker stack deploy -c $COMPOSE_FILE --with-registry-auth ${DEPLOY_NAME}" --network podnet
 
       

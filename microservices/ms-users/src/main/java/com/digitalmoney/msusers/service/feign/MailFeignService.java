@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
-@FeignClient(name = "ms-mails", url = "localhost:8084") //TODO: change to use the cloud instance
+@FeignClient(name = "ms-mails")
 public interface MailFeignService {
 
     @GetMapping("/send-activation-email")

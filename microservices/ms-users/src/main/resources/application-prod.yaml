@@ -15,6 +15,12 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}
+  cloud:
+    openfeign:
+      client:
+        config:
+          ms-accounts.url: ${MS_ACCOUNTS_DNS:http://localhost:8082}
+          ms-mails.url: ${MS_MAILS_DNS:http://localhost:8083}
 
 keycloak:
   url: ${KEYCLOAK_URL}

@@ -89,6 +89,7 @@ public class UserService {
         try {
             account = accountFeignService.findAccountByUserId(user.getId()).getBody();
         } catch (Exception e) {
+            log.error(e);
             throw new UserInternalServerException(e.getMessage());
         }
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Service
-@FeignClient(name = "ms-accounts", url = "localhost:8082") //TODO: change to use the cloud instance
+@FeignClient(name = "ms-accounts")
 public interface AccountFeignService {
 
     @PostMapping("/accounts/create")
