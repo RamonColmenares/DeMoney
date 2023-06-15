@@ -4,8 +4,8 @@ stages:
   
 variables:
   #registry variables
-  REGISTRY_REPOSITORY: "ms-gateway" #nombre de microservicio
-  COMPONENT: "ms-gateway"
+  REGISTRY_REPOSITORY: "gateway" #nombre de microservicio
+  COMPONENT: "gateway"
   TAG: "3.0.0"
   CI_REGISTRY: "registry-grupo5.local"
   CI_REGISTRY_USER: "grupo5"
