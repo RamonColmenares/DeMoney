@@ -2,20 +2,18 @@ package com.digitalmoney.msaccounts.service;
 
 import com.digitalmoney.msaccounts.application.dto.TransactionActivityDTO;
 import com.digitalmoney.msaccounts.application.exception.BadRequestException;
-import com.digitalmoney.msaccounts.application.exception.InternalServerException;
 import com.digitalmoney.msaccounts.application.dto.TransactionResponseDTO;
 import com.digitalmoney.msaccounts.application.utils.TransactionSpecification;
 import com.digitalmoney.msaccounts.application.dto.TransactionDetailDTO;
-import com.digitalmoney.msaccounts.application.exception.BadRequestException;
 import com.digitalmoney.msaccounts.application.exception.NotFoundException;
+import com.digitalmoney.msaccounts.persistency.dto.TransferenceRequest;
+import com.digitalmoney.msaccounts.persistency.entity.Account;
 import com.digitalmoney.msaccounts.persistency.entity.Transaction;
 import com.digitalmoney.msaccounts.persistency.repository.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.math.BigDecimal;
 
 @Service @AllArgsConstructor
 public class TransactionService {
@@ -34,6 +33,41 @@ public class TransactionService {
 
     public List<Transaction> findAll(){
         return repository.findAll();
+    }
+
+    public TransactionResponseDTO createTransactionFromCard(TransferenceRequest transferenceRequest, Account account) throws BadRequestException {
+
+        if (transferenceRequest.transactionAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BadRequestException("Amount must be greater than zero.");
+        }
+
+        LocalDateTime date = LocalDateTime.now();
+
+        Transaction transaction = new Transaction();
+
+        transaction.setAmount(transferenceRequest.transactionAmount());
+        transaction.setTransactionDate(date);
+        transaction.setDestinationCvu(transferenceRequest.destinationCvu());
+        transaction.setOriginCvu(transferenceRequest.originCvu());
+        transaction.setAccount(account);
+        transaction.setTransactionDescription("Deposit from credit/debit card.");
+        transaction.setTransactionType(Transaction.TransactionType.income);
+
+        repository.save(transaction);
+
+        TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(
+                account.getId(),
+                transferenceRequest.transactionAmount(),
+                date,
+                "Deposit from credit/debit card.",
+                transferenceRequest.destinationCvu(),
+                transaction.getId(),
+                transferenceRequest.originCvu(),
+                Transaction.TransactionType.income
+        );
+
+        return transactionResponseDTO;
+
     }
 
     public List<TransactionActivityDTO> getTransactionsByAccountId(Long idAccount, int limit, Integer minAmount, Integer maxAmount, LocalDate startDate, LocalDate endDate, String transactionTypeString) throws BadRequestException {
