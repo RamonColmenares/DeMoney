@@ -12,7 +12,10 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_PROFILES_ACTIVE: prod
     networks:
-      - swarmnet
+      - podnet
 
 networks:
-  swarmnet:
+  podnet:
+    external: true
+
+
