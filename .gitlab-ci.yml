@@ -16,7 +16,7 @@ trigger-users-pipeline-job:
   rules:
     - changes:
       - microservices/ms-users/**/**
-    - when: always
+    - when: on_success
 
 trigger-accounts-pipeline-job:
   stage: provision
@@ -26,7 +26,7 @@ trigger-accounts-pipeline-job:
   rules:
     - changes:
       - microservices/ms-accounts/**/**
-    - when: always
+    - when: on_success
 
 trigger-gateway-pipeline-job:
   stage: provision
@@ -36,7 +36,7 @@ trigger-gateway-pipeline-job:
   rules:
     - changes:
       - microservices/gateway/**/**
-    - when: always
+    - when: on_success
 
 
 
