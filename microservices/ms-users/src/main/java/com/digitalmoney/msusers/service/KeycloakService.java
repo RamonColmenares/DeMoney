@@ -205,6 +205,30 @@ public class KeycloakService {
         }
     }
 
+    /*
+        public Boolean validateToken(String userId) throws NotAuthorizedException {
+
+        try {
+            String currentToken = keycloakConnectionManager.getConnectionAdmin().tokenManager().getAccessToken().getToken();
+
+            AccessToken accessToken = TokenVerifier.create(currentToken, AccessToken.class).getToken();
+
+            if (accessToken == null) {
+                throw new NotAuthorizedException("Invalid token");
+            }
+
+            String tokenUserId = accessToken.getSubject();
+            if (!userId.equals(tokenUserId)) {
+                throw new NotAuthorizedException("Token does not match user ID");
+            }
+        } catch (Exception e) {
+            throw new NotAuthorizedException(e.getMessage());
+        }
+
+        return true;
+    }
+     */
+
     public boolean validateToken(String token) {
         /*Keycloak keycloak = keycloakConnectionManager.getConnectionAdmin().proxy();
         AdapterTokenVerifier
@@ -265,6 +289,33 @@ public class KeycloakService {
         credential.setTemporary(false);
         userResource.resetPassword(credential);
         keycloak.close();
+    }
+
+    public void updatePassword(String email, String password) {
+
+        String userId = getUserIdByEmail(email);
+
+        UserResource userResource = keycloakConnectionManager.getConnectionAdmin()
+                .realm("users-bank")
+                .users()
+                .get(userId);
+
+        UserRepresentation userRepresentation = userResource.toRepresentation();
+
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setValue(password);
+        credential.setTemporary(false);
+
+        List<CredentialRepresentation> credentials = userRepresentation.getCredentials();
+        if (credentials == null) {
+            credentials = new ArrayList<>();
+        } else {
+            // Remove existing password credentials
+            credentials.removeIf(cred -> cred.getType().equals(CredentialRepresentation.PASSWORD));
+        }
+        credentials.add(credential);
+        userRepresentation.setCredentials(credentials);
     }
 }
 
