@@ -12,6 +12,7 @@ import com.digitalmoney.msusers.application.dto.UserResponseDTO;
 import com.digitalmoney.msusers.persistency.entity.User;
 import com.digitalmoney.msusers.persistency.repository.UserRepository;
 import com.digitalmoney.msusers.service.feign.AccountFeignService;
+import com.digitalmoney.msusers.service.feign.MailFeignService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service @AllArgsConstructor @Log4j2
 public class UserService {
@@ -30,11 +32,14 @@ public class UserService {
     private final ObjectMapper mapper;
     private final AccountFeignService accountFeignService;
     private final KeycloakService keycloakService;
+    private final MailFeignService mailFeignService;
 
     public UserResponseDTO createUser(UserRegisterDTO user) throws UserInternalServerException {
          User userToStore = mapper.convertValue(user, User.class);
-         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-         userToStore.setPassword(passwordEncoder.encode(userToStore.getPassword()));
+         // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+         // userToStore.setPassword(passwordEncoder.encode(userToStore.getPassword()));
+        userToStore.setStatus(User.UserStatus.pending);
+        userToStore.setHash(UUID.randomUUID().toString());
          User userStored = userRepository.save(userToStore);
 
          UserAccountDTO accountToCreate = new UserAccountDTO(userStored.getId(), userStored.getDni());
@@ -48,7 +53,10 @@ public class UserService {
              throw new UserInternalServerException(e.getMessage());
          }
 
-         return new UserResponseDTO(
+        mailFeignService.sendActivationMail(userStored.getFirstName(), userStored.getEmail(), userStored.getHash());
+
+
+        return new UserResponseDTO(
                  userStored.getId(),
                  userStored.getFirstName(),
                  userStored.getLastName(),
@@ -175,5 +183,15 @@ public class UserService {
         } catch (NumberFormatException e) {
             throw new UserBadRequestException("the id must be numeric");
         }
+    }
+
+    public void activate(String password, String hash) {
+        User user = userRepository.findByHash(hash);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(password));
+        user.setStatus(User.UserStatus.active);
+        user.setHash(null);
+        userRepository.save(user);
+        keycloakService.activate(user, password);
     }
 }

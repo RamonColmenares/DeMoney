@@ -5,6 +5,7 @@ import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
 import com.digitalmoney.msusers.application.dto.UserUpdateDTO;
 import com.digitalmoney.msusers.config.beans.KeycloakConnectionManager;
 import com.digitalmoney.msusers.config.security.TokenProvider;
+import com.digitalmoney.msusers.persistency.entity.User;
 import lombok.extern.log4j.Log4j2;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
@@ -48,10 +49,10 @@ public class KeycloakService {
     }
 
     public Response createInKeycloak(UserRegisterDTO user) {
-        CredentialRepresentation credential = new CredentialRepresentation();
+        /*CredentialRepresentation credential = new CredentialRepresentation();
         credential.setType(CredentialRepresentation.PASSWORD);
         credential.setValue(user.password());
-        credential.setTemporary(false);
+        credential.setTemporary(false);*/
 
         UserRepresentation userDB = new UserRepresentation();
         userDB.setEnabled(true);
@@ -59,7 +60,6 @@ public class KeycloakService {
         userDB.setFirstName(user.firstName());
         userDB.setLastName(user.lastName());
         userDB.setEmail(user.email());
-        userDB.setCredentials(singletonList(credential));
         userDB.setRealmRoles(singletonList("user"));
 
 
@@ -254,6 +254,17 @@ public class KeycloakService {
             userRepresentation.setAttributes(new HashMap<>());
             userRepresentation.getAttributes().put("usedDBID", List.of(id.toString()));
             userResource.update(userRepresentation);
+    }
+
+    public void activate(User user, String password) {
+        Keycloak keycloak = keycloakConnectionManager.getConnectionAdmin();
+        UserResource userResource = keycloak.realm("users-bank").users().get(getUserIdByEmail(user.getEmail()));
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setValue(password);
+        credential.setTemporary(false);
+        userResource.resetPassword(credential);
+        keycloak.close();
     }
 }
 
