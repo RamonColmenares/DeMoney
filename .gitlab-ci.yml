@@ -18,16 +18,6 @@ trigger-mails-pipeline-job:
       - microservices/ms-mails/**/**
     - when: on_success
 
-trigger-users-pipeline-job:
-  stage: provision
-  trigger:
-    include: microservices/ms-users/.gitlab-ci.yml
-    strategy: depend
-  rules:
-    - changes:
-      - microservices/ms-users/**/**
-    - when: always
-
 trigger-accounts-pipeline-job:
   stage: provision
   trigger:
@@ -37,6 +27,16 @@ trigger-accounts-pipeline-job:
     - changes:
       - microservices/ms-accounts/**/**
     - when: on_success
+
+trigger-users-pipeline-job:
+  stage: provision
+  trigger:
+    include: microservices/ms-users/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+      - microservices/ms-users/**/**
+    - when: always
 
 trigger-gateway-pipeline-job:
   stage: provision
