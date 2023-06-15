@@ -1,25 +1,29 @@
 package com.digitalmoney.msaccounts.controller;
 
-import com.digitalmoney.msaccounts.application.dto.*;
-import com.digitalmoney.msaccounts.persistency.dto.TransactionResponseDTO;
-import com.digitalmoney.msaccounts.persistency.entity.Account;
-import com.digitalmoney.msaccounts.persistency.entity.Card;
-import com.digitalmoney.msaccounts.service.AccountService;
-import com.digitalmoney.msaccounts.service.CardService;
-import com.digitalmoney.msaccounts.service.SecurityService;
-import jakarta.validation.ConstraintViolationException;
-import org.springframework.http.HttpStatus;
+import com.digitalmoney.msaccounts.application.dto.AccountUpdateDTO;
+import com.digitalmoney.msaccounts.application.dto.CardDTO;
+import com.digitalmoney.msaccounts.application.dto.CardResponseDTO;
+import com.digitalmoney.msaccounts.application.dto.UserAccountDTO;
 import com.digitalmoney.msaccounts.application.exception.BadRequestException;
 import com.digitalmoney.msaccounts.application.exception.InternalServerException;
 import com.digitalmoney.msaccounts.application.exception.NotFoundException;
 import com.digitalmoney.msaccounts.application.exception.UnauthorizedException;
+import com.digitalmoney.msaccounts.application.dto.*;
+import com.digitalmoney.msaccounts.persistency.dto.TransferenceRequest;
+import com.digitalmoney.msaccounts.persistency.entity.Account;
+import com.digitalmoney.msaccounts.persistency.entity.Card;
+import com.digitalmoney.msaccounts.persistency.entity.Transaction;
+import com.digitalmoney.msaccounts.service.AccountService;
+import com.digitalmoney.msaccounts.service.CardService;
+import com.digitalmoney.msaccounts.service.SecurityService;
+import com.digitalmoney.msaccounts.service.TransactionService;
+import org.springframework.http.HttpStatus;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.digitalmoney.msaccounts.service.TransactionService;
-import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -38,6 +42,10 @@ public class AccountController {
     public List<Card> testDb2() {
         return cardService.findAll();
     }
+    @GetMapping("/test-db3")
+    public List<Transaction> testDb3() {
+        return transactionService.findAll();
+    }
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody UserAccountDTO user) {
@@ -48,9 +56,9 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<?> findByUserID(@PathVariable String id) throws NotFoundException, BadRequestException, UnauthorizedException {
-        return ResponseEntity.ok().body(service.findAccountByUserID(id));
+    @GetMapping("/user/{uid}")
+    public ResponseEntity<?> findByUserID(@PathVariable String uid) throws NotFoundException, BadRequestException, UnauthorizedException {
+        return ResponseEntity.ok().body(service.findAccountByUserID(uid));
     }
 
     @GetMapping("/{id}")
@@ -94,16 +102,56 @@ public class AccountController {
     }
 
     @GetMapping("{id}/activity")
-    public ResponseEntity<?> getAllMyTransactions(@PathVariable Long id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+    public ResponseEntity<?> getAllMyTransactions(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "100") int limit,
+            @RequestParam(required = false) Integer minAmount,
+            @RequestParam(required = false) Integer maxAmount,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) String transactionType) throws BadRequestException {
+
         if(!securityService.isMyAccount(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
         }
-        return ResponseEntity.ok(transactionService.getTransactionByAccountId(id, page, size));
+        return ResponseEntity.ok(transactionService.getTransactionsByAccountId(id, limit, minAmount, maxAmount, startDate, endDate, transactionType));
+    }
+
+    @GetMapping("{id}/activity/{transactionID}")
+    public ResponseEntity<?> getDetailOfTransaction(@PathVariable Long id, @PathVariable Long transactionID) throws NotFoundException, BadRequestException {
+        if(!securityService.isMyAccount(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
+        }
+        return ResponseEntity.ok(transactionService.getTransactionDetail(id, transactionID));
     }
 
     @GetMapping("{id}/transactions")
-    public ResponseEntity<?> getMyLastFiveTransactions(@PathVariable Long id) {
-        return getAllMyTransactions(id, 0, 5);
+    public ResponseEntity<?> getMyLastFiveTransactions(@PathVariable Long id) throws BadRequestException {
+        if(!securityService.isMyAccount(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
+        }
+        return ResponseEntity.ok(transactionService.getTransactionsByAccountId(id, 5, 0, 0, null, null, null));
+    }
+
+    @PostMapping("/{id}/transferences")
+    public ResponseEntity<?> createTransactionFromCard (@RequestBody TransferenceRequest transferenceRequest, @PathVariable Long id) {
+        try {
+            if (securityService.isMyAccount(id)) {
+                TransactionResponseDTO transaction = transactionService.createTransactionFromCard(transferenceRequest, service.findAccountByID(id.toString()));
+                if (cardService.findByIdAndAccountId(transferenceRequest.cardId(), id) != null) {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account does not belong to bearer.");
+            }
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+
     }
 
 }

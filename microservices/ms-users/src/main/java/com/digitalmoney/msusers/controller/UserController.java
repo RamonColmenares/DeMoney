@@ -4,8 +4,8 @@ import com.digitalmoney.msusers.application.dto.UserLoginDTO;
 import com.digitalmoney.msusers.application.dto.UserLoginResponseDTO;
 import com.digitalmoney.msusers.application.dto.UserRegisterDTO;
 import com.digitalmoney.msusers.application.dto.UserResponseDTO;
+import com.digitalmoney.msusers.application.dto.*;
 import com.digitalmoney.msusers.config.security.TokenProvider;
-import com.digitalmoney.msusers.application.dto.UserUpdateDTO;
 import com.digitalmoney.msusers.application.exception.UserBadRequestException;
 import com.digitalmoney.msusers.application.exception.UserInternalServerException;
 import com.digitalmoney.msusers.application.exception.UserNotFoundException;
@@ -13,6 +13,7 @@ import com.digitalmoney.msusers.application.exception.UserUnauthorizedException;
 import com.digitalmoney.msusers.persistency.entity.User;
 import com.digitalmoney.msusers.service.KeycloakService;
 import com.digitalmoney.msusers.service.UserService;
+import com.digitalmoney.msusers.service.feign.MailFeignService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,6 @@ public class UserController {
     private final UserService userService;
     private final KeycloakService keycloakService;
     private final TokenProvider tokenProvider;
-
 
     @GetMapping("/ping")
     public String ping() {
@@ -102,6 +102,7 @@ public class UserController {
         return ResponseEntity.ok().body(userService.findUserByID(id));
     }
 
+    // CHEQUEAR, UNA VEZ QUE SE ACTUALIZA EMAIL EN KEYCLOAK NO ME DEJA LOGUEARME -> responseDTO is null
     @PatchMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable String id, @RequestBody @Valid UserUpdateDTO user) throws UserNotFoundException, UserBadRequestException, UserUnauthorizedException, UserInternalServerException {
         return ResponseEntity.ok().body(userService.updateUser(id, user));
@@ -127,5 +128,11 @@ public class UserController {
         System.out.println(token);
         System.out.println(tokenProvider.isValid(token));
         return tokenProvider.isValid(token);
+    }
+
+    @PostMapping("/activate")
+    public ResponseEntity<?> validateUser(@RequestBody UserActivateDTO body, @RequestParam String hash) {
+        userService.activate(body.password(), hash);
+        return ResponseEntity.noContent().build();
     }
 }
