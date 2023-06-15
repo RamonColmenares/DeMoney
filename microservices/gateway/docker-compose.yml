@@ -8,7 +8,6 @@ services:
       MS_USERS_DNS: http://ms-users:8081
       MS_ACCOUNTS_DNS: http://ms-accounts:8082
     networks:
-      - podnet
+      - swarmnet
 networks:
-  podnet:
-    external: true
+  swarmnet:
