@@ -1,0 +1,21 @@
+version: '3'
+services:
+  ms-accounts:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+    image: ${IMAGE}
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: prod
+      #  g5network:
+  #    - g5network
+#    depends_on:
+#      - users_db
+#      - keycloak
+networks:
+  g5network:
+

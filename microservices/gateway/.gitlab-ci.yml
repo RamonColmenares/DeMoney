@@ -1,11 +1,10 @@
 stages:
   - build
   - deploy 
-  
+
 variables:
-  #registry variables
-  REGISTRY_REPOSITORY: "ms-accounts" #nombre de microservicio
-  COMPONENT: "ms-accounts"
+  REGISTRY_REPOSITORY: "gateway" #nombre de microservicio
+  COMPONENT: "gateway"
   TAG: "2.5.0"
   CI_REGISTRY: "registry-grupo5.local"
   CI_REGISTRY_USER: "grupo5"
@@ -27,7 +26,19 @@ variables:
   MS_ACCOUNTS_DNS: http://localhost:8082
   ROOT_PASSWORD: root
   KEYCLOAK_URL: http://ec2-18-215-159-36.compute-1.amazonaws.com:8080
-  SPRING_DATASOURCE_URL: jdbc:mysql://ec2-34-204-18-22.compute-1.amazonaws.com:3306/accounts
+  SPRING_DATASOURCE_URL: jdbc:mysql://ec2-34-204-18-22.compute-1.amazonaws.com:3306/users
+
+before_script:
+  - |                              
+    if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+      tag=""
+      echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = $CI_DEFAULT_BRANCH"
+    else
+      tag=":$CI_COMMIT_REF_SLUG"
+      echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+    fi
+    export DEPLOY_NAME="deploy_${tag}"
+    echo "DEPLOY_NAME: $DEPLOY_NAME"
 
 docker-build:
 #  variables:
