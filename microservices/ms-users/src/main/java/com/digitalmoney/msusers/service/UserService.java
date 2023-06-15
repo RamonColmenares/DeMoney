@@ -105,7 +105,12 @@ public class UserService {
     public UserUpdateResponseDTO updateUser(String id, UserUpdateDTO userUpdates) throws UserNotFoundException, UserUnauthorizedException, UserBadRequestException, UserInternalServerException {
         validateID(id);
 
-        User userFound = userRepository.findById(id).get();
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent()) {
+            throw new UserNotFoundException("the user with id " + id + " was not found");
+        }
+
+        User userFound = user.get();
         String keycloakEmail = userFound.getEmail();
 
         if (userUpdates.firstName() != null && !userUpdates.firstName().isEmpty()){
