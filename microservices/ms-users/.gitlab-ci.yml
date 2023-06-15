@@ -20,7 +20,7 @@ variables:
   DB_PASSWORD: s3rvice
   KEYCLOAK_SECRET: dC30gOyoOWNxK5rIPxYn15TS8rEkGxqY
   KEYCLOAK_REALM: users-bank
-  KEYCLOAK_USER: admin
+  KEYCLOAK_USER: api-admin
   KEYCLOAK_PASSWORD: p4ssword1234
   MS_USERS_DNS: http://localhost:8081
   MS_ACCOUNTS_DNS: http://localhost:8082
