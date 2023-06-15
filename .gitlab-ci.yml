@@ -38,7 +38,7 @@ trigger-gateway-pipeline-job:
       - microservices/gateway/**/**
     - when: on_success
 
-trigger-gateway-pipeline-job:
+trigger-mails-pipeline-job:
   stage: provision
   trigger:
     include: microservices/ms-mails/.gitlab-ci.yml
