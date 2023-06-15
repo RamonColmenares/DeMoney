@@ -15,7 +15,7 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       KEYCLOAK_REALM: ${KEYCLOAK_REALM}
       MS_ACCOUNTS_DNS: http://ms-accounts:8082
-      MS_MAILS_DNS: http://ms-mails:8082
+      MS_MAILS_DNS: http://ms-mails:8084
     networks:
       - podnet
 networks:

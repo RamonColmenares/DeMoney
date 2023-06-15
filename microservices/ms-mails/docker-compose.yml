@@ -1,6 +1,6 @@
 version: '3'
 services:
-  ms-accounts:
+  ms-mails:
 #    build:
 #      context: .
 #      dockerfile: Dockerfile
@@ -11,11 +11,11 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_PROFILES_ACTIVE: prod
-      #  g5network:
-  #    - g5network
-#    depends_on:
-#      - users_db
-#      - keycloak
+    networks:
+      - podne
+
 networks:
-  g5network:
+  podnet:
+    external: true
+
 
