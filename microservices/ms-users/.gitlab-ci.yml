@@ -5,7 +5,7 @@ stages:
 variables:
   REGISTRY_REPOSITORY: "ms-users" #nombre de microservicio
   COMPONENT: "ms-users"
-  TAG: "2.0.0"
+  TAG: "2.5.0"
   CI_REGISTRY: "registry-grupo5.local"
   CI_REGISTRY_USER: "grupo5"
   CI_REGISTRY_PASSWORD: "grupo5"
@@ -20,7 +20,7 @@ variables:
   DB_PASSWORD: s3rvice
   KEYCLOAK_SECRET: dC30gOyoOWNxK5rIPxYn15TS8rEkGxqY
   KEYCLOAK_REALM: users-bank
-  KEYCLOAK_USER: admin
+  KEYCLOAK_USER: api-admin
   KEYCLOAK_PASSWORD: p4ssword1234
   MS_USERS_DNS: http://localhost:8081
   MS_ACCOUNTS_DNS: http://localhost:8082
@@ -63,7 +63,7 @@ docker-build:
         echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
       fi
 
-    - docker build -t "$CI_IMAGE" ./microservices/ms-users/
+    - docker build -t "$CI_IMAGE" ./microservices/${COMPONENT}/
     - docker push "$CI_IMAGE"
     
 #  rules:

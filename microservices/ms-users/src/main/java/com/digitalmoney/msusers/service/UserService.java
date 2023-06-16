@@ -40,7 +40,12 @@ public class UserService {
          // userToStore.setPassword(passwordEncoder.encode(userToStore.getPassword()));
         userToStore.setStatus(User.UserStatus.pending);
         userToStore.setHash(UUID.randomUUID().toString());
-         User userStored = userRepository.save(userToStore);
+        User userStored = null;
+        try {
+            userStored = userRepository.save(userToStore);
+        } catch (Exception e) {
+            log.error("ERROR", e);
+        }
 
          UserAccountDTO accountToCreate = new UserAccountDTO(userStored.getId(), userStored.getDni());
 
@@ -89,6 +94,7 @@ public class UserService {
         try {
             account = accountFeignService.findAccountByUserId(user.getId()).getBody();
         } catch (Exception e) {
+            log.error(e);
             throw new UserInternalServerException(e.getMessage());
         }
 
