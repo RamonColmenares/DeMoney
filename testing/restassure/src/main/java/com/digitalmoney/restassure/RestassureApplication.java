@@ -1,13 +1,13 @@
-package com.digitalmoney.msmails;
+package com.digitalmoney.restassure;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MsMailsApplication {
+public class RestassureApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MsMailsApplication.class, args);
+		SpringApplication.run(RestassureApplication.class, args);
 	}
 
 }

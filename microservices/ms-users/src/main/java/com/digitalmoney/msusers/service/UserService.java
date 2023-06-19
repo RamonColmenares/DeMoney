@@ -217,6 +217,11 @@ public class UserService {
         }
 
         User user = userFound.get();
+        user.setHash(UUID.randomUUID().toString());
+        user.setStatus(User.UserStatus.pending);
+
+        keycloakService.removePassword(email);
+        userRepository.save(user);
 
         mailFeignService.sendRecoveryPasswordMail(user.getEmail(), user.getHash());
 
@@ -240,6 +245,8 @@ public class UserService {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userFound.setPassword(passwordEncoder.encode(userUpdatePasswordDTO.password()));
+        userFound.setHash(null);
+        userFound.setStatus(User.UserStatus.active);
 
         try {
             userRepository.save(userFound);

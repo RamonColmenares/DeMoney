@@ -20,7 +20,7 @@ spring:
       client:
         config:
           ms-accounts.url: ${MS_ACCOUNTS_DNS:http://localhost:8082}
-          ms-mails.url: ${MS_MAILS_DNS:http://localhost:8083}
+          ms-mails.url: ${MS_MAILS_DNS:http://localhost:8084}
 
 keycloak:
   url: ${KEYCLOAK_URL}

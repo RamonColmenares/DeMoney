@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/refresh-token").authenticated()
                         .requestMatchers(HttpMethod.GET, "/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/validate").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/update-password").permitAll()
                         .anyRequest().authenticated()
 
                 );
