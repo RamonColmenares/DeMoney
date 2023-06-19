@@ -1,11 +1,8 @@
 package com.digitalmoney.msmails.controller;
 
-import com.digitalmoney.msmails.dto.UserUpdatePasswordDTO;
 import com.digitalmoney.msmails.service.EmailService;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.thymeleaf.context.Context;
@@ -29,8 +26,8 @@ public class EmailController {
     public void recoverPassword(@RequestParam String email, @RequestParam String resetPasswordHash) {
         String recoveryLink = "www.digitalmoneyhouse.com/recover-password?hash=" + resetPasswordHash;
         Context context = new Context();
+        context.setVariable("recovery_link", recoveryLink);
         context.setVariable("email", email);
-        context.setVariable("recoveryLink", recoveryLink);
 
         emailService.sendEmail(email, "Password Recovery", "password_recovery", context);
     }

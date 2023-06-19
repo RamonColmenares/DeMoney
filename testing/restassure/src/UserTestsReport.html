@@ -1,0 +1,3043 @@
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ExtentReports</title>
+        <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@b00a2d0486596e73dd7326beacf352c639623a0e/commons/img/logo.png">
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@b00a2d0486596e73dd7326beacf352c639623a0e/commons/img/logo.png">
+	    <link href="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@6fbbd1c32fbc2463d026da5c6ce2e9eef0d29512/spark/css/spark-style.css" rel="stylesheet" />
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style type="text/css">
+
+</style></head>    <script src="https://cdn.rawgit.com/extent-framework/extent-github-cdn/7cc78ce/spark/js/jsontree.js"></script>
+<body class="spa -report standard">
+    <div class="app header-dark side-nav-folded">
+        <div class="layout">
+<div class="header navbar">
+    <div class="vheader">
+        <div class="nav-logo">
+          <a href="#">
+            <div class="logo logo-dark" style="background-image: url('https://cdn.rawgit.com/extent-framework/extent-github-cdn/d74480e/commons/img/logo.png')"></div>
+            <div class="logo logo-white" style="background-image: url('https://cdn.rawgit.com/extent-framework/extent-github-cdn/d74480e/commons/img/logo.png')"></div>
+          </a>
+        </div>
+        <ul class="nav-left">
+          <li class="search-box">
+            <a class="search-toggle" href="javascript:void(0);">
+              <i class="search-icon fa fa-search"></i>
+              <i class="search-icon-close fa fa-close"></i>
+            </a>
+          </li>
+          <li class="search-input">
+            <input id="search-tests" class="form-control" type="text" placeholder="Type to search...">
+          </li>
+        </ul>
+        <ul class="nav-right">
+          <li class="m-r-10">
+            <a href="#">
+              <span class="badge badge-primary">ExtentReports</span>
+            </a>
+          </li>
+            <li class="m-r-10">
+                <a href="#">
+                    <span class="badge badge-primary">jun. 19, 2023 10:24:07 a. m.</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div><div class="side-nav">
+  <div class="side-nav-inner">
+    <ul class="side-nav-menu scrollable">
+      <li class="nav-item dropdown" onclick="toggleView('test-view')">
+        <a id="nav-test" class="dropdown-toggle" href="index.html">
+          <span class="icon-holder">
+            <i class="fa fa-align-left"></i>
+          </span>
+          <span class="title">Tests</span>
+        </a>
+      </li>
+            <li class="nav-item dropdown" onclick="toggleView('tag-view')">
+        <a id="nav-tag" class="dropdown-toggle" href="tag.html">
+          <span class="icon-holder">
+            <i class="fa fa-tag"></i>
+          </span>
+          <span class="title">Tags</span>
+        </a>
+      </li>
+      <li class="nav-item dropdown" onclick="toggleView('dashboard-view')">
+        <a id="nav-dashboard" class="dropdown-toggle" href="dashboard.html">
+          <span class="icon-holder">
+            <i class="fa fa-bar-chart"></i>
+          </span>
+          <span class="title">Dashboard</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>            <div class="vcontainer">
+                <div class="main-content">
+<div class="test-wrapper row test-view">
+	<div class="test-list">
+		<div class="test-list-tools">
+			<ul class="tools pull-left">
+				<li>
+					<a href="">
+					<span class="font-size-14">Tests</span>
+					</a>
+				</li>
+			</ul>
+			<ul class="tools text-right">
+				<li class="user-profile dropdown dropdown-animated scale-left">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="fa fa-exclamation-circle"></i>
+					</a>
+					<ul id="status-toggle" class="dropdown-menu dropdown-md p-v-0">
+						<a class="dropdown-item" status="pass" href="#"><span>Pass</span><span class="status success pull-right"></span></a>
+						
+						
+						
+						
+						
+						<div class="dropdown-divider"></div>
+						<a status="clear" class="dropdown-item" href="#"><span>Clear</span><span class="pull-right"><i class="fa fa-close"></i></span></a>
+					</ul>
+				</li>
+				<li class="user-profile dropdown dropdown-animated scale-left">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="fa fa-user"></i>
+					</a>
+					<ul id="author-toggle" class="dropdown-menu dropdown-md p-v-0">
+						<a class="dropdown-item" href="#">LauraPanciroli</a>
+					</ul>
+				</li>
+				<li class="user-profile dropdown dropdown-animated scale-left">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="fa fa-tag"></i>
+					</a>
+					<ul id="tag-toggle" class="dropdown-menu dropdown-md p-v-0">
+						<a class="dropdown-item" href="#">Users</a>
+						<a class="dropdown-item" href="#">Suite:Smoke</a>
+						<a class="dropdown-item" href="#">RequestMethod:GET</a>
+						<a class="dropdown-item" href="#">StatusCode:200-OK</a>
+						<a class="dropdown-item" href="#">Sprint:1</a>
+						<a class="dropdown-item" href="#">RequestMethod:POST</a>
+						<a class="dropdown-item" href="#">StatusCode:400-BADREQUEST</a>
+						<a class="dropdown-item" href="#">StatusCode:409-CONFLICT</a>
+						<a class="dropdown-item" href="#">StatusCode:401-UNAUTHORIZED</a>
+						<a class="dropdown-item" href="#">Sprint:3</a>
+						<a class="dropdown-item" href="#">StatusCode:204-NOCONTENT</a>
+						<a class="dropdown-item" href="#">Sprint:2</a>
+						<a class="dropdown-item" href="#">RequestMethod:PATCH</a>
+						<a class="dropdown-item" href="#">StatusCode:500-INTERNALSERVERERROR</a>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="test-list-wrapper scrollable">
+			<ul class="test-list-item">
+				<li class="test-item"  status="pass" test-id="1"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:GET StatusCode:200-OK Sprint:1"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-001: GET Ping Users Microservice - Status Code: 200 - OK</p>
+							<p class="duration text-sm">0h 0m 0s+2ms</p>
+							<span class="datetime">10:24:08 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-001: GET Ping Users Microservice - Status Code: 200 - OK</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:08</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:08</span>
+									<span class='badge badge-default'>0h 0m 0s+2ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:GET</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:200-OK</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:1</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:08</td>
+				<td>
+						Ping exitoso al microservicio de usuarios.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="2"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:POST StatusCode:200-OK Sprint:1"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-004: POST Register User - Status Code: 200 - OK</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:09 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-004: POST Register User - Status Code: 200 - OK</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:09</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:09</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:POST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:200-OK</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:1</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:09</td>
+				<td>
+						Creación exitosa de usuario.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="3"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:POST StatusCode:400-BADREQUEST Sprint:1"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-005: POST Register User - Status Code: 400 - BAD REQUEST</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:20 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-005: POST Register User - Status Code: 400 - BAD REQUEST</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:20</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:20</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:POST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:400-BADREQUEST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:1</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:20</td>
+				<td>
+						Creación fallida de usuario por campo firstName vacío.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="4"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:POST StatusCode:409-CONFLICT Sprint:1"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-016: POST Register User - Status Code: 409 - CONFLICT</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:20 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-016: POST Register User - Status Code: 409 - CONFLICT</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:20</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:20</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:POST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:409-CONFLICT</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:1</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:20</td>
+				<td>
+						Creación fallida de usuario por utilizar un email ya registrado.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="5"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:GET StatusCode:200-OK Sprint:1"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-002: GET Users DB - Status Code: 200 - OK</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:21 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-002: GET Users DB - Status Code: 200 - OK</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:21</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:21</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:GET</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:200-OK</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:1</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:21</td>
+				<td>
+						Consulta exitosa de base de datos de usuarios.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="6"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:GET StatusCode:200-OK Sprint:1"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-003: GET Users Keycloak - Status Code: 200 - OK</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:23 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-003: GET Users Keycloak - Status Code: 200 - OK</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:23</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:23</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:GET</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:200-OK</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:1</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:23</td>
+				<td>
+						Conexión exitosa del microservicio de usuarios con Keycloak.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="7"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:POST StatusCode:401-UNAUTHORIZED Sprint:3"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-074: POST Login User - Status Code: 401 - UNAUTHORIZED</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:23 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-074: POST Login User - Status Code: 401 - UNAUTHORIZED</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:23</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:23</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:POST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:401-UNAUTHORIZED</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:3</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:23</td>
+				<td>
+						Login fallido al microservicio de usuarios por falta de activación de cuenta.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="8"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:POST StatusCode:204-NOCONTENT Sprint:3"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-075: POST User activation- Status Code: 204 - NO CONTENT</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:24 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-075: POST User activation- Status Code: 204 - NO CONTENT</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:24</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:24</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:POST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:204-NOCONTENT</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:3</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:24</td>
+				<td>
+						Activación exitosa de usuario.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="9"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:POST StatusCode:200-OK Sprint:1"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-026: POST Login User - Status Code: 200 - OK</p>
+							<p class="duration text-sm">0h 0m 0s+1ms</p>
+							<span class="datetime">10:24:27 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-026: POST Login User - Status Code: 200 - OK</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:27</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:27</span>
+									<span class='badge badge-default'>0h 0m 0s+1ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:POST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:200-OK</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:1</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:27</td>
+				<td>
+						Login exitoso al microservicio de usuarios.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="10"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:POST StatusCode:401-UNAUTHORIZED Sprint:1"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-028: POST Login User - Status Code: 401 - UNAUTHORIZED</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:27 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-028: POST Login User - Status Code: 401 - UNAUTHORIZED</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:27</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:27</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:POST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:401-UNAUTHORIZED</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:1</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:27</td>
+				<td>
+						Login fallido al microservicio de usuarios por contraseña incorrecta.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="11"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:POST StatusCode:400-BADREQUEST Sprint:1"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-029: POST Login User - Status Code: 400 - BAD REQUEST</p>
+							<p class="duration text-sm">0h 0m 0s+1ms</p>
+							<span class="datetime">10:24:28 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-029: POST Login User - Status Code: 400 - BAD REQUEST</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:28</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:28</span>
+									<span class='badge badge-default'>0h 0m 0s+1ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:POST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:400-BADREQUEST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:1</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:28</td>
+				<td>
+						Login fallido al microservicio de usuarios por campos vacíos.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="12"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:GET StatusCode:200-OK Sprint:2"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-043: GET User by ID - Status Code: 200 - OK</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:28 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-043: GET User by ID - Status Code: 200 - OK</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:28</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:28</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:GET</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:200-OK</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:2</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:28</td>
+				<td>
+						Obtención exitosa de un usuario por su ID.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="13"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:PATCH StatusCode:200-OK Sprint:2"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-046: PATCH User by ID - Status Code: 200 - OK</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:30 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-046: PATCH User by ID - Status Code: 200 - OK</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:30</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:30</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:PATCH</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:200-OK</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:2</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:30</td>
+				<td>
+						Actualización exitosa de un usuario por su ID.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="14"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:GET StatusCode:200-OK Sprint:3"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-076: GET Send email for password update - Status Code: 200 - OK</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:34 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-076: GET Send email for password update - Status Code: 200 - OK</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:34</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:34</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:GET</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:200-OK</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:3</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:34</td>
+				<td>
+						Envío exitoso de correo para la actualización de contraseña de un usuario.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="15"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:GET StatusCode:500-INTERNALSERVERERROR Sprint:3"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-077: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:41 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-077: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:41</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:41</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:GET</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:500-INTERNALSERVERERROR</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:3</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:41</td>
+				<td>
+						Envío fallido de correo para la actualización de contraseña de un usuario por envío de email erróneo.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="16"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:GET StatusCode:500-INTERNALSERVERERROR Sprint:3"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-078: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:42 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-078: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:42</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:42</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:GET</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:500-INTERNALSERVERERROR</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:3</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:42</td>
+				<td>
+						Envío fallido de correo para la actualización de contraseña de un usuario por envío de email de otro usuario.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="17"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:POST StatusCode:200-OK Sprint:3"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-079: POST Login User - Status Code: 200 - OK</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:43 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-079: POST Login User - Status Code: 200 - OK</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:43</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:43</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:POST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:200-OK</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:3</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:43</td>
+				<td>
+						Validación exitosa de correo para la actualización de contraseña de un usuario.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+				<li class="test-item"  status="pass" test-id="18"
+					author="LauraPanciroli"
+					tag="Users Suite:Smoke RequestMethod:POST StatusCode:200-OK Sprint:1"
+					device="">
+					<div class="status-avatar pass-bg">
+						<i class="fa fa-check text-white"></i>
+					</div>
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">TC-034: POST Logout User - Status Code: 200 - OK</p>
+							<p class="duration text-sm">0h 0m 0s+0ms</p>
+							<span class="datetime">10:24:47 a. m.</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="detail-head">
+							<div class="p-v-10 d-inline-block">
+								<div class="info">
+									<h5 class="test-status text-pass">TC-034: POST Logout User - Status Code: 200 - OK</h5>
+									<span class='badge badge-success'>06.19.2023 10:24:47</span>
+									<span class='badge badge-danger'>06.19.2023 10:24:47</span>
+									<span class='badge badge-default'>0h 0m 0s+0ms</span>
+								</div>
+								<div class="m-t-15">
+			<span class="badge badge-pill badge-default"><i class="fa fa-user-o"></i> LauraPanciroli</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Users</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Suite:Smoke</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> RequestMethod:POST</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> StatusCode:200-OK</span>
+			<span class="badge badge-pill badge-default"><i class="fa fa-tag"></i> Sprint:1</span>
+								</div>
+								<div class="m-t-10 m-l-5">
+									
+								</div>
+							</div>
+						</div>
+<div class="detail-body mt-4">                                              
+<table class="table table-sm">
+	<thead><tr>
+		<th class="status-col">Status</th>
+		<th class="timestamp-col">Timestamp</th>
+		<th class="details-col">Details</th>
+	</tr></thead>
+	<tbody>
+			<tr class="event-row">
+				<td><i class="fa fa-info text-info"></i></td>
+				<td>10:24:47</td>
+				<td>
+						Logout exitoso del microservicio de usuarios.
+				</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="test-content scrollable">
+		<div class="test-content-tools">
+			<ul>
+				<li>
+					<a class="back-to-test" href="javascript:void(0)">
+					<i class="fa fa-arrow-left"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="test-content-detail">
+			<div class="detail-body"></div>
+		</div>
+	</div>
+</div><div class="test-wrapper row tag-view attributes-view">
+	<div class="test-list">
+		<div class="test-list-tools">
+			<ul class="tools pull-left">
+				<li>
+					<a href="">
+					<span class="font-size-14">Tags</span>
+					</a>
+				</li>
+			</ul>
+			<ul class="tools text-right">
+				<li>
+					<a href="#">
+					<span class="badge badge-primary">14</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="test-list-wrapper scrollable">
+			<ul class="test-list-item">
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">Users</p>
+							<p class="duration text-sm">18 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>18</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>Users</h4>
+							<span status="pass" class='badge badge-success'>18 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:08 a. m.</td>
+									<td class='linked' test-id='1'>
+										TC-001: GET Ping Users Microservice - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:09 a. m.</td>
+									<td class='linked' test-id='2'>
+										TC-004: POST Register User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:20 a. m.</td>
+									<td class='linked' test-id='3'>
+										TC-005: POST Register User - Status Code: 400 - BAD REQUEST
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:20 a. m.</td>
+									<td class='linked' test-id='4'>
+										TC-016: POST Register User - Status Code: 409 - CONFLICT
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:21 a. m.</td>
+									<td class='linked' test-id='5'>
+										TC-002: GET Users DB - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:23 a. m.</td>
+									<td class='linked' test-id='6'>
+										TC-003: GET Users Keycloak - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:23 a. m.</td>
+									<td class='linked' test-id='7'>
+										TC-074: POST Login User - Status Code: 401 - UNAUTHORIZED
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:24 a. m.</td>
+									<td class='linked' test-id='8'>
+										TC-075: POST User activation- Status Code: 204 - NO CONTENT
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:27 a. m.</td>
+									<td class='linked' test-id='9'>
+										TC-026: POST Login User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:27 a. m.</td>
+									<td class='linked' test-id='10'>
+										TC-028: POST Login User - Status Code: 401 - UNAUTHORIZED
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:28 a. m.</td>
+									<td class='linked' test-id='11'>
+										TC-029: POST Login User - Status Code: 400 - BAD REQUEST
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:28 a. m.</td>
+									<td class='linked' test-id='12'>
+										TC-043: GET User by ID - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:30 a. m.</td>
+									<td class='linked' test-id='13'>
+										TC-046: PATCH User by ID - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:34 a. m.</td>
+									<td class='linked' test-id='14'>
+										TC-076: GET Send email for password update - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:41 a. m.</td>
+									<td class='linked' test-id='15'>
+										TC-077: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:42 a. m.</td>
+									<td class='linked' test-id='16'>
+										TC-078: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:43 a. m.</td>
+									<td class='linked' test-id='17'>
+										TC-079: POST Login User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:47 a. m.</td>
+									<td class='linked' test-id='18'>
+										TC-034: POST Logout User - Status Code: 200 - OK
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">Suite:Smoke</p>
+							<p class="duration text-sm">18 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>18</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>Suite:Smoke</h4>
+							<span status="pass" class='badge badge-success'>18 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:08 a. m.</td>
+									<td class='linked' test-id='1'>
+										TC-001: GET Ping Users Microservice - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:09 a. m.</td>
+									<td class='linked' test-id='2'>
+										TC-004: POST Register User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:20 a. m.</td>
+									<td class='linked' test-id='3'>
+										TC-005: POST Register User - Status Code: 400 - BAD REQUEST
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:20 a. m.</td>
+									<td class='linked' test-id='4'>
+										TC-016: POST Register User - Status Code: 409 - CONFLICT
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:21 a. m.</td>
+									<td class='linked' test-id='5'>
+										TC-002: GET Users DB - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:23 a. m.</td>
+									<td class='linked' test-id='6'>
+										TC-003: GET Users Keycloak - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:23 a. m.</td>
+									<td class='linked' test-id='7'>
+										TC-074: POST Login User - Status Code: 401 - UNAUTHORIZED
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:24 a. m.</td>
+									<td class='linked' test-id='8'>
+										TC-075: POST User activation- Status Code: 204 - NO CONTENT
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:27 a. m.</td>
+									<td class='linked' test-id='9'>
+										TC-026: POST Login User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:27 a. m.</td>
+									<td class='linked' test-id='10'>
+										TC-028: POST Login User - Status Code: 401 - UNAUTHORIZED
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:28 a. m.</td>
+									<td class='linked' test-id='11'>
+										TC-029: POST Login User - Status Code: 400 - BAD REQUEST
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:28 a. m.</td>
+									<td class='linked' test-id='12'>
+										TC-043: GET User by ID - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:30 a. m.</td>
+									<td class='linked' test-id='13'>
+										TC-046: PATCH User by ID - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:34 a. m.</td>
+									<td class='linked' test-id='14'>
+										TC-076: GET Send email for password update - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:41 a. m.</td>
+									<td class='linked' test-id='15'>
+										TC-077: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:42 a. m.</td>
+									<td class='linked' test-id='16'>
+										TC-078: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:43 a. m.</td>
+									<td class='linked' test-id='17'>
+										TC-079: POST Login User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:47 a. m.</td>
+									<td class='linked' test-id='18'>
+										TC-034: POST Logout User - Status Code: 200 - OK
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">RequestMethod:GET</p>
+							<p class="duration text-sm">7 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>7</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>RequestMethod:GET</h4>
+							<span status="pass" class='badge badge-success'>7 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:08 a. m.</td>
+									<td class='linked' test-id='1'>
+										TC-001: GET Ping Users Microservice - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:21 a. m.</td>
+									<td class='linked' test-id='5'>
+										TC-002: GET Users DB - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:23 a. m.</td>
+									<td class='linked' test-id='6'>
+										TC-003: GET Users Keycloak - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:28 a. m.</td>
+									<td class='linked' test-id='12'>
+										TC-043: GET User by ID - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:34 a. m.</td>
+									<td class='linked' test-id='14'>
+										TC-076: GET Send email for password update - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:41 a. m.</td>
+									<td class='linked' test-id='15'>
+										TC-077: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:42 a. m.</td>
+									<td class='linked' test-id='16'>
+										TC-078: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">StatusCode:200-OK</p>
+							<p class="duration text-sm">10 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>10</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>StatusCode:200-OK</h4>
+							<span status="pass" class='badge badge-success'>10 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:08 a. m.</td>
+									<td class='linked' test-id='1'>
+										TC-001: GET Ping Users Microservice - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:09 a. m.</td>
+									<td class='linked' test-id='2'>
+										TC-004: POST Register User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:21 a. m.</td>
+									<td class='linked' test-id='5'>
+										TC-002: GET Users DB - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:23 a. m.</td>
+									<td class='linked' test-id='6'>
+										TC-003: GET Users Keycloak - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:27 a. m.</td>
+									<td class='linked' test-id='9'>
+										TC-026: POST Login User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:28 a. m.</td>
+									<td class='linked' test-id='12'>
+										TC-043: GET User by ID - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:30 a. m.</td>
+									<td class='linked' test-id='13'>
+										TC-046: PATCH User by ID - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:34 a. m.</td>
+									<td class='linked' test-id='14'>
+										TC-076: GET Send email for password update - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:43 a. m.</td>
+									<td class='linked' test-id='17'>
+										TC-079: POST Login User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:47 a. m.</td>
+									<td class='linked' test-id='18'>
+										TC-034: POST Logout User - Status Code: 200 - OK
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">Sprint:1</p>
+							<p class="duration text-sm">10 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>10</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>Sprint:1</h4>
+							<span status="pass" class='badge badge-success'>10 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:08 a. m.</td>
+									<td class='linked' test-id='1'>
+										TC-001: GET Ping Users Microservice - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:09 a. m.</td>
+									<td class='linked' test-id='2'>
+										TC-004: POST Register User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:20 a. m.</td>
+									<td class='linked' test-id='3'>
+										TC-005: POST Register User - Status Code: 400 - BAD REQUEST
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:20 a. m.</td>
+									<td class='linked' test-id='4'>
+										TC-016: POST Register User - Status Code: 409 - CONFLICT
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:21 a. m.</td>
+									<td class='linked' test-id='5'>
+										TC-002: GET Users DB - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:23 a. m.</td>
+									<td class='linked' test-id='6'>
+										TC-003: GET Users Keycloak - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:27 a. m.</td>
+									<td class='linked' test-id='9'>
+										TC-026: POST Login User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:27 a. m.</td>
+									<td class='linked' test-id='10'>
+										TC-028: POST Login User - Status Code: 401 - UNAUTHORIZED
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:28 a. m.</td>
+									<td class='linked' test-id='11'>
+										TC-029: POST Login User - Status Code: 400 - BAD REQUEST
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:47 a. m.</td>
+									<td class='linked' test-id='18'>
+										TC-034: POST Logout User - Status Code: 200 - OK
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">RequestMethod:POST</p>
+							<p class="duration text-sm">10 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>10</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>RequestMethod:POST</h4>
+							<span status="pass" class='badge badge-success'>10 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:09 a. m.</td>
+									<td class='linked' test-id='2'>
+										TC-004: POST Register User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:20 a. m.</td>
+									<td class='linked' test-id='3'>
+										TC-005: POST Register User - Status Code: 400 - BAD REQUEST
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:20 a. m.</td>
+									<td class='linked' test-id='4'>
+										TC-016: POST Register User - Status Code: 409 - CONFLICT
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:23 a. m.</td>
+									<td class='linked' test-id='7'>
+										TC-074: POST Login User - Status Code: 401 - UNAUTHORIZED
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:24 a. m.</td>
+									<td class='linked' test-id='8'>
+										TC-075: POST User activation- Status Code: 204 - NO CONTENT
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:27 a. m.</td>
+									<td class='linked' test-id='9'>
+										TC-026: POST Login User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:27 a. m.</td>
+									<td class='linked' test-id='10'>
+										TC-028: POST Login User - Status Code: 401 - UNAUTHORIZED
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:28 a. m.</td>
+									<td class='linked' test-id='11'>
+										TC-029: POST Login User - Status Code: 400 - BAD REQUEST
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:43 a. m.</td>
+									<td class='linked' test-id='17'>
+										TC-079: POST Login User - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:47 a. m.</td>
+									<td class='linked' test-id='18'>
+										TC-034: POST Logout User - Status Code: 200 - OK
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">StatusCode:400-BADREQUEST</p>
+							<p class="duration text-sm">2 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>2</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>StatusCode:400-BADREQUEST</h4>
+							<span status="pass" class='badge badge-success'>2 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:20 a. m.</td>
+									<td class='linked' test-id='3'>
+										TC-005: POST Register User - Status Code: 400 - BAD REQUEST
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:28 a. m.</td>
+									<td class='linked' test-id='11'>
+										TC-029: POST Login User - Status Code: 400 - BAD REQUEST
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">StatusCode:409-CONFLICT</p>
+							<p class="duration text-sm">1 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>1</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>StatusCode:409-CONFLICT</h4>
+							<span status="pass" class='badge badge-success'>1 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:20 a. m.</td>
+									<td class='linked' test-id='4'>
+										TC-016: POST Register User - Status Code: 409 - CONFLICT
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">StatusCode:401-UNAUTHORIZED</p>
+							<p class="duration text-sm">2 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>2</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>StatusCode:401-UNAUTHORIZED</h4>
+							<span status="pass" class='badge badge-success'>2 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:23 a. m.</td>
+									<td class='linked' test-id='7'>
+										TC-074: POST Login User - Status Code: 401 - UNAUTHORIZED
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:27 a. m.</td>
+									<td class='linked' test-id='10'>
+										TC-028: POST Login User - Status Code: 401 - UNAUTHORIZED
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">Sprint:3</p>
+							<p class="duration text-sm">6 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>6</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>Sprint:3</h4>
+							<span status="pass" class='badge badge-success'>6 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:23 a. m.</td>
+									<td class='linked' test-id='7'>
+										TC-074: POST Login User - Status Code: 401 - UNAUTHORIZED
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:24 a. m.</td>
+									<td class='linked' test-id='8'>
+										TC-075: POST User activation- Status Code: 204 - NO CONTENT
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:34 a. m.</td>
+									<td class='linked' test-id='14'>
+										TC-076: GET Send email for password update - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:41 a. m.</td>
+									<td class='linked' test-id='15'>
+										TC-077: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:42 a. m.</td>
+									<td class='linked' test-id='16'>
+										TC-078: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:43 a. m.</td>
+									<td class='linked' test-id='17'>
+										TC-079: POST Login User - Status Code: 200 - OK
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">StatusCode:204-NOCONTENT</p>
+							<p class="duration text-sm">1 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>1</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>StatusCode:204-NOCONTENT</h4>
+							<span status="pass" class='badge badge-success'>1 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:24 a. m.</td>
+									<td class='linked' test-id='8'>
+										TC-075: POST User activation- Status Code: 204 - NO CONTENT
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">Sprint:2</p>
+							<p class="duration text-sm">2 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>2</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>Sprint:2</h4>
+							<span status="pass" class='badge badge-success'>2 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:28 a. m.</td>
+									<td class='linked' test-id='12'>
+										TC-043: GET User by ID - Status Code: 200 - OK
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:30 a. m.</td>
+									<td class='linked' test-id='13'>
+										TC-046: PATCH User by ID - Status Code: 200 - OK
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">RequestMethod:PATCH</p>
+							<p class="duration text-sm">1 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>1</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>RequestMethod:PATCH</h4>
+							<span status="pass" class='badge badge-success'>1 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:30 a. m.</td>
+									<td class='linked' test-id='13'>
+										TC-046: PATCH User by ID - Status Code: 200 - OK
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li class="test-item">
+					<div class="open-test">
+						<div class="test-detail">
+							<p class="name">StatusCode:500-INTERNALSERVERERROR</p>
+							<p class="duration text-sm">2 tests</p>
+							<span class="datetime">
+							<span class='badge badge-success'>2</span>
+							
+							
+							
+							</span>
+						</div>
+					</div>
+					<div class="test-contents d-none">
+						<div class="info">
+							<h4>StatusCode:500-INTERNALSERVERERROR</h4>
+							<span status="pass" class='badge badge-success'>2 passed</span>
+							
+							
+							
+						</div>
+						<table class='table table-sm mt-4'>
+							<thead>
+								<tr>
+									<th class="status-col">Status</th>
+									<th class="timestamp-col">Timestamp</th>
+									<th>TestName</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:41 a. m.</td>
+									<td class='linked' test-id='15'>
+										TC-077: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR
+									</td>
+								</tr>
+								<tr class="tag-test-status" status="pass">
+									<td>
+										<div class='status-avatar pass-bg'>
+											<i class="fa fa-check text-white"></i>
+										</div>
+									</td>
+									<td>10:24:42 a. m.</td>
+									<td class='linked' test-id='16'>
+										TC-078: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="test-content scrollable">
+		<div class="test-content-tools">
+			<ul>
+				<li>
+					<a class="back-to-test" href="javascript:void(0)">
+					<i class="fa fa-arrow-left"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="test-content-detail">
+			<div class="detail-body"></div>
+		</div>
+	</div>
+</div>                    <!-- dashboard -->
+<div class="container-fluid p-4 dashboard-view">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h6 class="card-title">Tests</h6>
+				</div>
+				<div class="card-body">
+					<div class="">
+						<canvas id='parent-analysis' width='115' height='90'></canvas>
+					</div>
+				</div>
+				<div class="card-footer">
+					<div><small data-tooltip='100%'>
+						<b>18</b> tests passed
+						</small>
+					</div>
+					<div>
+						<small data-tooltip='0%'><b>0</b> tests failed, 
+						<b>0</b> skipped, <b data-tooltip='0%'>0</b> others
+						</small>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h6 class="card-title">Log events</h6>
+				</div>
+				<div class="card-body">
+					<div class="">
+						<canvas id='events-analysis' width='115' height='90'></canvas>
+					</div>
+				</div>
+				<div class="card-footer">
+					<div><small data-tooltip='0%'><b>0</b> events passed</small></div>
+					<div>
+						<small data-tooltip='0%'><b>0</b> events failed, 
+						<b data-tooltip='100%'>18</b> others
+						</small>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="card">
+				<div class="card-body box-height-150">
+					<div class="media justify-content-between">
+						<div class="card-header">
+							<h6 class="card-title">Tests</h6>
+							<h2 class="font-size-28 font-weight-light mt-3">18</h2>
+							<span class="text-semibold text-success font-size-15">
+							<i class="ti-arrow-up font-size-11"></i> 
+							<span>100,00%</span>
+							</span>
+						</div>
+						<div class="align-self-end">
+							<i class="fa fa-align-left font-size-70 opacity-01"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card">
+				<div class="card-body box-height-150">
+					<div class="media justify-content-between">
+						<div class="card-header">
+							<h6 class="card-title">Start</h6>
+							<h4 class="font-weight-light mt-4">jun. 19, 2023 10:24:07 a. m.</h4>
+							<span class="text-semibold text-success font-size-15">
+						</div>
+						<div class="align-self-end">
+							<i class="fa fa-clock-o font-size-70 text-success opacity-01"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card">
+				<div class="card-body box-height-150">
+					<div class="media justify-content-between">
+						<div class="card-header">
+							<h6 class="card-title">Duration</h6>
+							<h4 class="font-weight-light mt-4">0h 0m 40s+349ms</h4>
+							<span class="text-semibold font-size-15">
+						</div>
+						<div class="align-self-end">
+							<i class="fa fa-clock-o font-size-70 opacity-01"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<h6 class="card-title">Timeline</h6>
+				</div>
+				<div class="card-body">
+					<div class="">
+						<canvas id="timeline" height="120"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h6 class="card-title">Author</h6>
+				</div>
+				<div class="table-overflow">
+					<table class="table table-sm">
+						<thead>
+							<tr class="bg-gray">
+								<th>Name</th>
+								<th>Passed</th>
+								<th>Failed</th>
+								<th>Skipped</th>
+								<th>Others</th>
+								<th>Passed %</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>LauraPanciroli</td>
+								<td>18</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h6 class="card-title">Tags</h6>
+				</div>
+				<div class="table-overflow">
+					<table class="table table-sm">
+						<thead>
+							<tr class="bg-gray">
+								<th>Name</th>
+								<th>Passed</th>
+								<th>Failed</th>
+								<th>Skipped</th>
+								<th>Others</th>
+								<th>Passed %</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Users</td>
+								<td>18</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>Suite:Smoke</td>
+								<td>18</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>RequestMethod:GET</td>
+								<td>7</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>StatusCode:200-OK</td>
+								<td>10</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>Sprint:1</td>
+								<td>10</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>RequestMethod:POST</td>
+								<td>10</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>StatusCode:400-BADREQUEST</td>
+								<td>2</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>StatusCode:409-CONFLICT</td>
+								<td>1</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>StatusCode:401-UNAUTHORIZED</td>
+								<td>2</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>Sprint:3</td>
+								<td>6</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>StatusCode:204-NOCONTENT</td>
+								<td>1</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>Sprint:2</td>
+								<td>2</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>RequestMethod:PATCH</td>
+								<td>1</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+							<tr>
+								<td>StatusCode:500-INTERNALSERVERERROR</td>
+								<td>2</td>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+								<td>
+									100%
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var statusGroup = {
+	    parentCount: 18,
+		passParent: 18,
+		failParent: 0,
+		fatalParent: 0,
+		errorParent: 0,
+		warningParent: 0,
+		skipParent: 0,
+		exceptionsParent: 0,
+		childCount: 0,
+		passChild: 0,
+		failChild: 0,
+		fatalChild: 0,
+		errorChild: 0,
+		warningChild: 0,
+		skipChild: 0,
+		infoChild: 0,
+		debugChild: 0,
+		exceptionsChild: 0,
+		grandChildCount: 0,
+		passGrandChild: 0,
+		failGrandChild: 0,
+		fatalGrandChild: 0,
+		errorGrandChild: 0,
+		warningGrandChild: 0,
+		skipGrandChild: 0,
+		infoGrandChild: 0,
+		debugGrandChild: 0,
+		exceptionsGrandChild: 0,
+		eventsCount: 18,
+		passEvents: 0,
+		failEvents: 0,
+		fatalEvents: 0,
+		errorEvents: 0,
+		warningEvents: 0,
+		skipEvents: 0,
+		infoEvents: 18,
+		debugEvents: 0,
+		exceptionsEvents: 0
+	};
+</script>
+<script>
+	var timeline = {
+	        "TC-001: GET Ping Users Microservice - Status Code: 200 - OK":0.002,"TC-004: POST Register User - Status Code: 200 - OK":0,"TC-005: POST Register User - Status Code: 400 - BAD REQUEST":0,"TC-016: POST Register User - Status Code: 409 - CONFLICT":0,"TC-002: GET Users DB - Status Code: 200 - OK":0,"TC-003: GET Users Keycloak - Status Code: 200 - OK":0,"TC-074: POST Login User - Status Code: 401 - UNAUTHORIZED":0,"TC-075: POST User activation- Status Code: 204 - NO CONTENT":0,"TC-026: POST Login User - Status Code: 200 - OK":0.001,"TC-028: POST Login User - Status Code: 401 - UNAUTHORIZED":0,"TC-029: POST Login User - Status Code: 400 - BAD REQUEST":0.001,"TC-043: GET User by ID - Status Code: 200 - OK":0,"TC-046: PATCH User by ID - Status Code: 200 - OK":0,"TC-076: GET Send email for password update - Status Code: 200 - OK":0,"TC-077: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR":0,"TC-078: Send email for password update - Status Code: 500 - INTERNAL SERVER ERROR":0,"TC-079: POST Login User - Status Code: 200 - OK":0,"TC-034: POST Logout User - Status Code: 200 - OK":0
+	};
+</script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@ac7abbc71b4bb073da00153a5a3fdbcfe0c95e2a/spark/js/spark-script.js"></script>
+<script type="text/javascript">
+
+
+</script></body>
+</html>

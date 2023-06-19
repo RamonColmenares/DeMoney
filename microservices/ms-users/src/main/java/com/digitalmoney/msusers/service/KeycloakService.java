@@ -292,30 +292,23 @@ public class KeycloakService {
     }
 
     public void updatePassword(String email, String password) {
-
-        String userId = getUserIdByEmail(email);
-
-        UserResource userResource = keycloakConnectionManager.getConnectionAdmin()
-                .realm("users-bank")
-                .users()
-                .get(userId);
-
-        UserRepresentation userRepresentation = userResource.toRepresentation();
-
+        Keycloak keycloak = keycloakConnectionManager.getConnectionAdmin();
+        UserResource userResource = keycloak.realm("users-bank").users().get(getUserIdByEmail(email));
         CredentialRepresentation credential = new CredentialRepresentation();
         credential.setType(CredentialRepresentation.PASSWORD);
         credential.setValue(password);
         credential.setTemporary(false);
+        userResource.resetPassword(credential);
+        keycloak.close();
+    }
 
-        List<CredentialRepresentation> credentials = userRepresentation.getCredentials();
-        if (credentials == null) {
-            credentials = new ArrayList<>();
-        } else {
-            // Remove existing password credentials
-            credentials.removeIf(cred -> cred.getType().equals(CredentialRepresentation.PASSWORD));
-        }
-        credentials.add(credential);
-        userRepresentation.setCredentials(credentials);
+    public void removePassword(String email) {
+        Keycloak keycloak = keycloakConnectionManager.getConnectionAdmin();
+        UserResource userResource = keycloak.realm("users-bank").users().get(getUserIdByEmail(email));
+
+        userResource.removeCredential(userResource.credentials().get(0).getId());
+
+        keycloak.close();
     }
 }
 

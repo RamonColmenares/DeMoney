@@ -13,7 +13,6 @@ import com.digitalmoney.msusers.application.exception.UserUnauthorizedException;
 import com.digitalmoney.msusers.persistency.entity.User;
 import com.digitalmoney.msusers.service.KeycloakService;
 import com.digitalmoney.msusers.service.UserService;
-import com.digitalmoney.msusers.service.feign.MailFeignService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
