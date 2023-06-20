@@ -47,7 +47,7 @@ public class TransactionService {
 
         transaction.setAmount(transferenceRequest.transactionAmount());
         transaction.setTransactionDate(date);
-        transaction.setDestinationCvu(transferenceRequest.destinationCvu());
+        transaction.setDestinationCvu(account.getCvu());
         transaction.setOriginCvu(transferenceRequest.originCvu());
         transaction.setAccount(account);
         transaction.setTransactionDescription("Deposit from credit/debit card.");
@@ -60,7 +60,7 @@ public class TransactionService {
                 transferenceRequest.transactionAmount(),
                 date,
                 "Deposit from credit/debit card.",
-                transferenceRequest.destinationCvu(),
+                account.getCvu(),
                 transaction.getId(),
                 transferenceRequest.originCvu(),
                 Transaction.TransactionType.income
