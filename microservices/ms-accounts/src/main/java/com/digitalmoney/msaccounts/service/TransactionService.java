@@ -11,12 +11,20 @@ import com.digitalmoney.msaccounts.persistency.entity.Account;
 import com.digitalmoney.msaccounts.persistency.entity.Transaction;
 import com.digitalmoney.msaccounts.persistency.repository.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.tools.javac.Main;
 import lombok.AllArgsConstructor;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import java.time.LocalDate;
@@ -125,5 +133,88 @@ public class TransactionService {
         }
 
         return mapper.convertValue(transaction, TransactionDetailDTO.class);
+    }
+
+    public PDDocument downloadTransactionDetail(Long id, Long transactionID) throws NotFoundException, BadRequestException, IOException {
+        TransactionDetailDTO transaction = getTransactionDetail(id, transactionID);
+
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage();
+        document.addPage(page);
+
+        float pageWidth = page.getMediaBox().getWidth();
+        float pageHeight = page.getMediaBox().getHeight();
+
+        String imagePath = Main.class.getClassLoader().getResource("logo.png").getPath();
+        PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath,document);
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        contentStream.drawImage(pdImage, 40, pageHeight-100);
+
+        contentStream.beginText();
+        contentStream.setLeading(25);
+        contentStream.newLineAtOffset((float) (pageWidth*0.70), pageHeight-60);
+
+        contentStream.setFont(PDType1Font.HELVETICA, 14);
+
+        contentStream.showText("Transacción Nº " + transactionID);
+        contentStream.newLine();
+        contentStream.showText("Fecha: " + transaction.getTransactionDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setLeading(30);
+        contentStream.newLineAtOffset(40 , 3 * pageHeight/4);
+
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+        contentStream.showText("IMPORTE");
+
+        contentStream.newLine();
+
+        contentStream.setFont(PDType1Font.HELVETICA, 20);
+        contentStream.showText("$ " + transaction.getAmount());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setLeading(30);
+        contentStream.newLineAtOffset(40 ,  5 * pageHeight/8);
+
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+        contentStream.showText("ORIGEN");
+
+        contentStream.newLine();
+
+        contentStream.setFont(PDType1Font.HELVETICA, 16);
+        contentStream.showText("CBU/CVU: " + transaction.getOriginCvu());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setLeading(30);
+        contentStream.newLineAtOffset(40 ,  pageHeight/2);
+
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+        contentStream.showText("DESTINO");
+
+        contentStream.newLine();
+
+        contentStream.setFont(PDType1Font.HELVETICA, 16);
+        contentStream.showText("CBU/CVU: " + transaction.getDestinationCvu());
+        contentStream.endText();
+
+        if (transaction.getTransactionDescription().length() > 0) {
+            contentStream.beginText();
+            contentStream.newLineAtOffset(40 , pageHeight/4);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD_OBLIQUE, 14);
+            contentStream.showText("Descripción: ");
+
+            contentStream.setFont(PDType1Font.HELVETICA, 14);
+            contentStream.showText(transaction.getTransactionDescription());
+            contentStream.endText();
+        }
+
+        contentStream.close();
+
+        return document;
     }
 }
