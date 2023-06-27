@@ -164,6 +164,16 @@ public class TransactionService {
         contentStream.endText();
 
         contentStream.beginText();
+        contentStream.newLineAtOffset(40 , (float) (pageHeight*0.80));
+        contentStream.setFont(PDType1Font.HELVETICA, 18);
+        if (transaction.getTransactionType().equals(Transaction.TransactionType.income)){
+            contentStream.showText("DEPÓSITO DE DINERO");
+        } else if(transaction.getTransactionType().equals(Transaction.TransactionType.expense)){
+            contentStream.showText("TRANSFERENCIA DE DINERO");
+        }
+        contentStream.endText();
+
+        contentStream.beginText();
         contentStream.setLeading(30);
         contentStream.newLineAtOffset(40 , 3 * pageHeight/4);
 
@@ -176,31 +186,46 @@ public class TransactionService {
         contentStream.showText("$ " + transaction.getAmount());
         contentStream.endText();
 
-        contentStream.beginText();
-        contentStream.setLeading(30);
-        contentStream.newLineAtOffset(40 ,  5 * pageHeight/8);
+        if (transaction.getTransactionType().equals(Transaction.TransactionType.expense)){
+            contentStream.beginText();
+            contentStream.setLeading(30);
+            contentStream.newLineAtOffset(40 ,  5 * pageHeight/8);
 
-        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
-        contentStream.showText("ORIGEN");
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+            contentStream.showText("ORIGEN");
 
-        contentStream.newLine();
+            contentStream.newLine();
 
-        contentStream.setFont(PDType1Font.HELVETICA, 16);
-        contentStream.showText("CBU/CVU: " + transaction.getOriginCvu());
-        contentStream.endText();
+            contentStream.setFont(PDType1Font.HELVETICA, 16);
+            contentStream.showText("CVU: " + transaction.getOriginCvu());
+            contentStream.endText();
 
-        contentStream.beginText();
-        contentStream.setLeading(30);
-        contentStream.newLineAtOffset(40 ,  pageHeight/2);
+            contentStream.beginText();
+            contentStream.setLeading(30);
+            contentStream.newLineAtOffset(40 ,  pageHeight/2);
 
-        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
-        contentStream.showText("DESTINO");
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+            contentStream.showText("DESTINO");
 
-        contentStream.newLine();
+            contentStream.newLine();
 
-        contentStream.setFont(PDType1Font.HELVETICA, 16);
-        contentStream.showText("CBU/CVU: " + transaction.getDestinationCvu());
-        contentStream.endText();
+            contentStream.setFont(PDType1Font.HELVETICA, 16);
+            contentStream.showText("CBU/CVU: " + transaction.getDestinationCvu());
+            contentStream.endText();
+        } else if (transaction.getTransactionType().equals(Transaction.TransactionType.income)){
+            contentStream.beginText();
+            contentStream.setLeading(30);
+            contentStream.newLineAtOffset(40 ,  5 * pageHeight/8);
+
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
+            contentStream.showText("DESTINO");
+
+            contentStream.newLine();
+
+            contentStream.setFont(PDType1Font.HELVETICA, 16);
+            contentStream.showText("CVU: " + transaction.getDestinationCvu());
+            contentStream.endText();
+        }
 
         if (transaction.getTransactionDescription().length() > 0) {
             contentStream.beginText();
