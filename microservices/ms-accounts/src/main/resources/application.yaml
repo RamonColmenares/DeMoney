@@ -15,6 +15,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   config:
     import: optional:file:.env.local[.properties]
+  cloud:
+    openfeign:
+      client:
+        config:
+          ms-users.url: ${MS_USERS_DNS:http://localhost:8081}
 
 
 logging:

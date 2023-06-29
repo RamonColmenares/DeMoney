@@ -159,4 +159,12 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @GetMapping("/{id}/findUserName")
+    public ResponseEntity<?> getUserName (@PathVariable Long id) {
+
+        return ResponseEntity.ok(userService.findName(id));
+
+    }
+
 }

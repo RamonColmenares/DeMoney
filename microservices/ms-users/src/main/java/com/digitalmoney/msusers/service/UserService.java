@@ -265,4 +265,13 @@ public class UserService {
                 userFound.getEmail(),
                 userFound.getPhone());
     }
+
+    public UserTransactionResponse findName (Long id) {
+
+        Optional<User> user = userRepository.findById(id);
+        UserTransactionResponse result = new UserTransactionResponse(user.get().getFirstName(), user.get().getLastName());
+
+        return result;
+
+    }
 }
