@@ -1,14 +1,18 @@
 package com.digitalmoney.msaccounts.service;
 
 import com.digitalmoney.msaccounts.application.dto.TransactionActivityDTO;
+import com.digitalmoney.msaccounts.application.dto.TransferenceResponseDTO;
 import com.digitalmoney.msaccounts.application.exception.BadRequestException;
 import com.digitalmoney.msaccounts.application.dto.TransactionResponseDTO;
+import com.digitalmoney.msaccounts.application.exception.GoneException;
+import com.digitalmoney.msaccounts.application.exception.TransferenceException;
 import com.digitalmoney.msaccounts.application.utils.TransactionSpecification;
 import com.digitalmoney.msaccounts.application.dto.TransactionDetailDTO;
 import com.digitalmoney.msaccounts.application.exception.NotFoundException;
 import com.digitalmoney.msaccounts.persistency.dto.TransferenceRequest;
 import com.digitalmoney.msaccounts.persistency.entity.Account;
 import com.digitalmoney.msaccounts.persistency.entity.Transaction;
+import com.digitalmoney.msaccounts.persistency.repository.AccountRepository;
 import com.digitalmoney.msaccounts.persistency.repository.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.tools.javac.Main;
@@ -22,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -31,12 +36,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.math.BigDecimal;
 
 @Service @AllArgsConstructor
 public class TransactionService {
     private final TransactionRepository repository;
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final ObjectMapper mapper;
 
     public List<Transaction> findAll(){
@@ -55,7 +63,7 @@ public class TransactionService {
 
         transaction.setAmount(transferenceRequest.transactionAmount());
         transaction.setTransactionDate(date);
-        transaction.setDestinationCvu(account.getCvu());
+        transaction.setDestination(account.getCvu());
         transaction.setOriginCvu(transferenceRequest.originCvu());
         transaction.setAccount(account);
         transaction.setTransactionDescription("Deposit from credit/debit card.");
@@ -133,6 +141,79 @@ public class TransactionService {
         }
 
         return mapper.convertValue(transaction, TransactionDetailDTO.class);
+    }
+
+    @Transactional
+    public TransferenceResponseDTO createTransference(com.digitalmoney.msaccounts.application.dto.TransferenceRequest transferenceRequest, Account account) throws BadRequestException, GoneException, NotFoundException, TransferenceException {
+
+        if(transferenceRequest.transactionAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BadRequestException("Amount must be greater than zero.");
+        }
+
+        if(BigDecimal.valueOf(account.getBalance()).compareTo(transferenceRequest.transactionAmount()) < 0) {
+            throw new GoneException("Insufficient funds.");
+        }
+
+        if(transferenceRequest.destination().contains(".")) {
+            if(!accountService.validateAlias(transferenceRequest.destination()) || transferenceRequest.destination().length() > 22) {
+                throw new BadRequestException("Invalid alias.");
+            }
+        } else {
+            if(!transferenceRequest.destination().matches("\\d+") || transferenceRequest.destination().length() != 22) {
+                throw new BadRequestException("Invalid CVU o CBU.");
+            }
+        }
+
+        Optional<Account> destinationAccount;
+        if(!transferenceRequest.destination().contains(".")) {
+            destinationAccount = accountRepository.findByCvu(transferenceRequest.destination());
+        } else {
+            destinationAccount = accountRepository.findByAlias(transferenceRequest.destination());
+        }
+
+        if (destinationAccount.isPresent()) {
+            if (account.getAlias().equals(destinationAccount.get().getAlias())) {
+                throw new BadRequestException("The destination account must be different from the source account.");
+            }
+        }
+
+        Transaction transaction = new Transaction();
+        LocalDateTime date = LocalDateTime.now();
+        transaction.setDestination(destinationAccount.isPresent() ? destinationAccount.get().getCvu() : transferenceRequest.destination());
+        transaction.setAmount(transferenceRequest.transactionAmount());
+        transaction.setTransactionDate(date);
+        transaction.setOriginCvu(account.getCvu());
+        transaction.setAccount(account);
+        transaction.setTransactionDescription("Transference to another account.");
+        transaction.setTransactionType(Transaction.TransactionType.expense);
+
+        Long transactionId;
+
+        try {
+            repository.save(transaction);
+            transactionId = transaction.getId();
+            if (destinationAccount.isPresent()) {
+                Transaction transactionIncome = transaction.cloneAsIncome();
+                transactionIncome.setAccount(destinationAccount.get());
+                repository.save(transactionIncome);
+            }
+        } catch (Exception e) {
+            throw new TransferenceException("Error during funds transfer");
+        }
+
+        TransferenceResponseDTO transactionResponseDTO = new TransferenceResponseDTO(
+                account.getId(),
+                transferenceRequest.transactionAmount(),
+                date,
+                "Transference to another account.",
+                destinationAccount.isPresent() ? destinationAccount.get().getCvu() : transferenceRequest.destination(),
+                transactionId,
+                account.getCvu(),
+                Transaction.TransactionType.expense
+        );
+
+        return transactionResponseDTO;
+
     }
 
     public PDDocument downloadTransactionDetail(Long id, Long transactionID) throws NotFoundException, BadRequestException, IOException {

@@ -40,9 +40,9 @@ public class Transaction {
     private String transactionDescription;
 
     @NotNull
-    @Size(min = 22, max = 22)
+    @Size(min = 3, max = 22)
     @Column(name = "destination_cvu")
-    private String destinationCvu;
+    private String destination;
 
     @NotNull
     @Size(min = 22, max = 22)
@@ -56,5 +56,17 @@ public class Transaction {
     // Enums
     public enum TransactionType {
         income, expense
+    }
+
+    public Transaction cloneAsIncome() {
+        Transaction clone = new Transaction();
+        clone.setAccount(this.getAccount());
+        clone.setAmount(this.getAmount());
+        clone.setTransactionDate(this.getTransactionDate());
+        clone.setTransactionDescription(this.getTransactionDescription());
+        clone.setDestination(this.getDestination());
+        clone.setOriginCvu(this.getOriginCvu());
+        clone.setTransactionType(Transaction.TransactionType.income);
+        return clone;
     }
 }
