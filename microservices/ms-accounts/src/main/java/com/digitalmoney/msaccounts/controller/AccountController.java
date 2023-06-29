@@ -4,10 +4,7 @@ import com.digitalmoney.msaccounts.application.dto.AccountUpdateDTO;
 import com.digitalmoney.msaccounts.application.dto.CardDTO;
 import com.digitalmoney.msaccounts.application.dto.CardResponseDTO;
 import com.digitalmoney.msaccounts.application.dto.UserAccountDTO;
-import com.digitalmoney.msaccounts.application.exception.BadRequestException;
-import com.digitalmoney.msaccounts.application.exception.InternalServerException;
-import com.digitalmoney.msaccounts.application.exception.NotFoundException;
-import com.digitalmoney.msaccounts.application.exception.UnauthorizedException;
+import com.digitalmoney.msaccounts.application.exception.*;
 import com.digitalmoney.msaccounts.application.dto.*;
 import com.digitalmoney.msaccounts.persistency.dto.TransferenceRequest;
 import com.digitalmoney.msaccounts.persistency.entity.Account;
@@ -17,14 +14,19 @@ import com.digitalmoney.msaccounts.service.AccountService;
 import com.digitalmoney.msaccounts.service.CardService;
 import com.digitalmoney.msaccounts.service.SecurityService;
 import com.digitalmoney.msaccounts.service.TransactionService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.coyote.Response;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.http.HttpStatus;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -125,15 +127,24 @@ public class AccountController {
         return ResponseEntity.ok(transactionService.getTransactionDetail(id, transactionID));
     }
 
-    @GetMapping("{id}/transactions")
-    public ResponseEntity<?> getMyLastFiveTransactions(@PathVariable Long id) throws BadRequestException {
+    @GetMapping("{id}/transferences")
+    public ResponseEntity<?> getMyLastTenTransactions(@PathVariable Long id) throws BadRequestException {
         if(!securityService.isMyAccount(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
         }
-        return ResponseEntity.ok(transactionService.getTransactionsByAccountId(id, 5, 0, 0, null, null, null));
+        return ResponseEntity.ok(transactionService.getTransactionsByAccountId(id, 10, 0, 0, null, null, null)
+                .stream()
+                .map(e -> {
+                    try {
+                        return transactionService.getTransactionDetail(id, e.getTransactionId());
+                    } catch (Exception ignored) {
+                        // the code should never reach here, the transactions SHOULD exist.
+                    }
+                    return null;
+                }).collect(Collectors.toList()));
     }
 
-    @PostMapping("/{id}/transferences")
+    @PostMapping("/{id}/deposits")
     public ResponseEntity<?> createTransactionFromCard (@RequestBody TransferenceRequest transferenceRequest, @PathVariable Long id) {
         try {
             if (securityService.isMyAccount(id)) {
@@ -164,5 +175,41 @@ public class AccountController {
 
     }
 
+    @PostMapping("/{id}/transferences")
+    public ResponseEntity<?> createTransference(@RequestBody com.digitalmoney.msaccounts.application.dto.TransferenceRequest transferenceRequest, @PathVariable Long id) {
+        try {
+            if (securityService.isMyAccount(id)) {
+                TransferenceResponseDTO transference = transactionService.createTransference(transferenceRequest, service.findAccountByID(id.toString()));
+                return ResponseEntity.status(HttpStatus.OK).body(transference);
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account does not belong to bearer.");
+            }
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (GoneException e) {
+            return ResponseEntity.status(HttpStatus.GONE).body(e.getMessage());
+        } catch (TransferenceException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+
+    }
+
+    @GetMapping("{id}/transaction/{transactionId}/receipt")
+    @ResponseBody
+    public ResponseEntity<?> downloadTransactionDetailPDF(@PathVariable Long id, @PathVariable Long transactionId, HttpServletResponse response) throws IOException, NotFoundException, BadRequestException {
+        if(!securityService.isMyAccount(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
+        }
+        PDDocument document = transactionService.downloadTransactionDetail(id, transactionId);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=transaction" + transactionId + ".pdf");
+
+        document.save(response.getOutputStream());
+        document.close();
+        return ResponseEntity.ok().body("Downloading receipt");
+    }
 
 }

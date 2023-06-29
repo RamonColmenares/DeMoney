@@ -54,4 +54,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> unmanagedException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
+
+    @ExceptionHandler({GoneException.class})
+    public ResponseEntity<String> goneError(GoneException ex) {
+        return ResponseEntity.status(HttpStatus.GONE).body(ex.getMessage());
+    }
+
+    @ExceptionHandler({TransferenceException.class})
+    public ResponseEntity<String> transferenceError(TransferenceException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
 }
