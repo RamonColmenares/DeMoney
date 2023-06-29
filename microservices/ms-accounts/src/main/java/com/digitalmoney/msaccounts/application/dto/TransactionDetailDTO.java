@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class TransactionDetailDTO {
+    private Long id;
     private BigDecimal amount;
     private LocalDateTime transactionDate;
     private String transactionDescription;

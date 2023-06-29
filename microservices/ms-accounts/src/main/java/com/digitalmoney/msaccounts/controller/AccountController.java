@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -129,12 +130,21 @@ public class AccountController {
         return ResponseEntity.ok(transactionService.getTransactionDetail(id, transactionID));
     }
 
-    @GetMapping("{id}/transactions")
-    public ResponseEntity<?> getMyLastFiveTransactions(@PathVariable Long id) throws BadRequestException {
+    @GetMapping("{id}/transferences")
+    public ResponseEntity<?> getMyLastTenTransactions(@PathVariable Long id) throws BadRequestException {
         if(!securityService.isMyAccount(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
         }
-        return ResponseEntity.ok(transactionService.getTransactionsByAccountId(id, 5, 0, 0, null, null, null));
+        return ResponseEntity.ok(transactionService.getTransactionsByAccountId(id, 10, 0, 0, null, null, null)
+                .stream()
+                .map(e -> {
+                    try {
+                        return transactionService.getTransactionDetail(id, e.getTransactionId());
+                    } catch (Exception ignored) {
+                        // the code should never reach here, the transactions SHOULD exist.
+                    }
+                    return null;
+                }).collect(Collectors.toList()));
     }
 
     @PostMapping("/{id}/transferences")
