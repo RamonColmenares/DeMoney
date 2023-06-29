@@ -17,12 +17,16 @@ import com.digitalmoney.msaccounts.service.AccountService;
 import com.digitalmoney.msaccounts.service.CardService;
 import com.digitalmoney.msaccounts.service.SecurityService;
 import com.digitalmoney.msaccounts.service.TransactionService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.coyote.Response;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.http.HttpStatus;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -154,4 +158,19 @@ public class AccountController {
 
     }
 
+    @GetMapping("{id}/transaction/{transactionId}/receipt")
+    @ResponseBody
+    public ResponseEntity<?> downloadTransactionDetailPDF(@PathVariable Long id, @PathVariable Long transactionId, HttpServletResponse response) throws IOException, NotFoundException, BadRequestException {
+        if(!securityService.isMyAccount(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
+        }
+        PDDocument document = transactionService.downloadTransactionDetail(id, transactionId);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=transaction" + transactionId + ".pdf");
+
+        document.save(response.getOutputStream());
+        document.close();
+        return ResponseEntity.ok().body("Downloading receipt");
+    }
 }
