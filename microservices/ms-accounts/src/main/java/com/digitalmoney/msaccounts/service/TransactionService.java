@@ -154,14 +154,8 @@ public class TransactionService {
             throw new GoneException("Insufficient funds.");
         }
 
-        if(transferenceRequest.destination().contains(".")) {
-            if(!accountService.validateAlias(transferenceRequest.destination()) || transferenceRequest.destination().length() > 22) {
-                throw new BadRequestException("Invalid alias.");
-            }
-        } else {
-            if(!transferenceRequest.destination().matches("\\d+") || transferenceRequest.destination().length() != 22) {
-                throw new BadRequestException("Invalid CVU o CBU.");
-            }
+        if(!(transferenceRequest.destination().matches("\\d{22}") || transferenceRequest.destination().matches("^[a-z]{6,22}\\.[a-z]{6,22}\\.[a-z]{6,22}$") || transferenceRequest.destination().matches("^[a-zA-Z0-9.-]{6,20}$"))) {
+            throw new BadRequestException("Invalid destination account.");
         }
 
         Optional<Account> destinationAccount;
