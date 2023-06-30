@@ -165,6 +165,16 @@ public class AccountController {
 
     }
 
+    @GetMapping("/{id}/last-five-transferred-accounts")
+    public ResponseEntity<?> getLastFiveTransferredAccounts (@PathVariable Long id) throws Exception {
+
+        if(!securityService.isMyAccount(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Account doesnt belong to bearer");
+        }
+        return ResponseEntity.ok(transactionService.getLastFiveTransferredAccounts(id));
+
+    }
+
     @PostMapping("/{id}/transferences")
     public ResponseEntity<?> createTransference(@RequestBody com.digitalmoney.msaccounts.application.dto.TransferenceRequest transferenceRequest, @PathVariable Long id) {
         try {

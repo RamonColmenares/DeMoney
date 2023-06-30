@@ -8,6 +8,7 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_PROFILES_ACTIVE: prod
+      MS_USERS_DNS: http://ms-users:8081
     networks:
       - podnet
 networks:

@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/validate").permitAll()
                         .requestMatchers(HttpMethod.POST, "/update-password").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/{id}/findUserName").permitAll()
                         .anyRequest().authenticated()
 
                 );

@@ -1,5 +1,8 @@
 package com.digitalmoney.msaccounts.service;
 
+import com.digitalmoney.msaccounts.application.dto.*;
+import com.digitalmoney.msaccounts.application.exception.BadRequestException;
+import com.digitalmoney.msaccounts.application.exception.InternalServerException;
 import com.digitalmoney.msaccounts.application.dto.TransactionActivityDTO;
 import com.digitalmoney.msaccounts.application.dto.TransferenceResponseDTO;
 import com.digitalmoney.msaccounts.application.exception.BadRequestException;
@@ -7,13 +10,13 @@ import com.digitalmoney.msaccounts.application.dto.TransactionResponseDTO;
 import com.digitalmoney.msaccounts.application.exception.GoneException;
 import com.digitalmoney.msaccounts.application.exception.TransferenceException;
 import com.digitalmoney.msaccounts.application.utils.TransactionSpecification;
-import com.digitalmoney.msaccounts.application.dto.TransactionDetailDTO;
 import com.digitalmoney.msaccounts.application.exception.NotFoundException;
 import com.digitalmoney.msaccounts.persistency.dto.TransferenceRequest;
 import com.digitalmoney.msaccounts.persistency.entity.Account;
 import com.digitalmoney.msaccounts.persistency.entity.Transaction;
 import com.digitalmoney.msaccounts.persistency.repository.AccountRepository;
 import com.digitalmoney.msaccounts.persistency.repository.TransactionRepository;
+import com.digitalmoney.msaccounts.service.feign.UserFeignService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.tools.javac.Main;
 import lombok.AllArgsConstructor;
@@ -29,6 +32,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.*;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -44,6 +48,7 @@ import java.math.BigDecimal;
 @Service @AllArgsConstructor
 public class TransactionService {
     private final TransactionRepository repository;
+    private final UserFeignService userFeignService;
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final ObjectMapper mapper;
@@ -142,6 +147,48 @@ public class TransactionService {
         }
 
         return mapper.convertValue(transaction, TransactionDetailDTO.class);
+    }
+
+    public List<TransferredAccountsResponseDTO> getLastFiveTransferredAccounts (Long accountId) throws Exception {
+
+        List <TransferredAccountsResponseDTO> result = new ArrayList<>();
+
+        Optional<Account> account = accountRepository.findById(accountId);
+        try {
+
+            List<Transaction> resultQuery = repository.findByAccountIdAndDestinationNotAndTransactionTypeNotOrderByTransactionDateDesc(accountId, account.get().getCvu(), Transaction.TransactionType.income);
+            Set<String> addedCvus = new HashSet<>();
+
+            System.out.println(resultQuery.toString());
+
+            for (Transaction accountResponse: resultQuery){
+                System.out.println(accountResponse.toString());
+                if (addedCvus.contains(accountResponse.getDestination())){
+                    continue;
+                } else {
+                    addedCvus.add(accountResponse.getDestination());
+                }
+                Optional<Account> account1 = accountRepository.findByCvu(accountResponse.getDestination());
+                System.out.println(account1.toString());
+
+                System.out.println("get user");
+                if (account1.isPresent()){
+                    UserDTO userDTO = userFeignService.findUserById(account1.get().getUserId().toString()).getBody();
+                    result.add(new TransferredAccountsResponseDTO(userDTO.name(), userDTO.last_name(), accountResponse.getDestination(), accountResponse.getTransactionDate()));
+                } else {
+                    result.add(new TransferredAccountsResponseDTO("","", accountResponse.getDestination(), accountResponse.getTransactionDate()));
+                }
+
+                if (addedCvus.size() > 4){
+                    break;
+                }
+            }
+        } catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+
+        return result;
+
     }
 
     @Transactional
