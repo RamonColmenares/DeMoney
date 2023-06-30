@@ -21,7 +21,7 @@ public class TransactionDetailDTO {
     private BigDecimal amount;
     private LocalDateTime transactionDate;
     private String transactionDescription;
-    private String destinationCvu;
+    private String destination;
     private String originCvu;
     private Transaction.TransactionType transactionType;
 }

@@ -32,6 +32,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.*;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -269,8 +270,7 @@ public class TransactionService {
         float pageWidth = page.getMediaBox().getWidth();
         float pageHeight = page.getMediaBox().getHeight();
 
-        String imagePath = Main.class.getClassLoader().getResource("logo.png").getPath();
-        PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath,document);
+        PDImageXObject pdImage = PDImageXObject.createFromFileByExtension(new File("logo.png"), document);
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         contentStream.drawImage(pdImage, 40, pageHeight-100);
@@ -333,7 +333,7 @@ public class TransactionService {
             contentStream.newLine();
 
             contentStream.setFont(PDType1Font.HELVETICA, 16);
-            contentStream.showText("CBU/CVU: " + transaction.getDestinationCvu());
+            contentStream.showText("CBU/CVU: " + transaction.getDestination());
             contentStream.endText();
         } else if (transaction.getTransactionType().equals(Transaction.TransactionType.income)){
             contentStream.beginText();
@@ -346,7 +346,7 @@ public class TransactionService {
             contentStream.newLine();
 
             contentStream.setFont(PDType1Font.HELVETICA, 16);
-            contentStream.showText("CVU: " + transaction.getDestinationCvu());
+            contentStream.showText("CVU: " + transaction.getDestination());
             contentStream.endText();
         }
 
