@@ -1,0 +1,12 @@
+server:
+  port: 8083
+
+spring:
+  config:
+    import: optional:file:.env.local[.properties]
+
+microservices:
+  users: ${MS_USERS_DNS:http://localhost:8081}
+  accounts: ${MS_ACCOUNTS_DNS:http://localhost:8082}
+
+

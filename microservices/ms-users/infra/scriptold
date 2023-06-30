@@ -1,0 +1,15 @@
+      pwd
+      ls -la
+      ssh -o StrictHostKeyChecking=no -i "$EC2_PASSWORD" ${SSH_USER}@${appNode} 'mkdir -p /home/ec2-user/sa/${REGISTRY_REPOSITORY}'
+      scp -o StrictHostKeyChecking=no -i "$EC2_PASSWORD" "./microservices/${COMPONENT}/${COMPOSE_FILE}" "${SSH_USER}@${appNode}":/home/ec2-user/sa/${REGISTRY_RESPOSITORY}/    
+      ssh -o StrictHostKeyChecking=no -i "$EC2_PASSWORD" ${SSH_USER}@${appNode} 'cd /home/ec2-user/sa/${REGISTRY_RESPOSITORY}/
+        echo ${CI_REGISTRY_PASSWORD} | docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} --password-stdin
+        docker pull ${CI_IMAGE}
+        export IMAGE=${CI_IMAGE}
+        export KEYCLOAK_USER=${KEYCLOAK_USER}
+        export KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
+        export DB_PASSWORD=${DB_PASSWORD}
+        export KEYCLOAK_SECRET=${KEYCLOAK_SECRET}
+        export KEYCLOAK_REALM=${KEYCLOAK_REALM}
+        export ROOT_PASSWORD=${ROOT_PASSWORD}
+        docker stack deploy --compose-file $COMPOSE_FILE --with-registry-auth ${DEPLOY_NAME}'

@@ -1,0 +1,17 @@
+version: '3'
+services:
+  ms-accounts:
+    image: ${IMAGE}
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: prod
+      MS_USERS_DNS: http://ms-users:8081
+    networks:
+      - podnet
+networks:
+  podnet:
+    external: true
+

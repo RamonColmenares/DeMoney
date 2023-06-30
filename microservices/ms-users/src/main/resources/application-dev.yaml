@@ -1,0 +1,12 @@
+#Keycloak authorization properties
+keycloak.realm=Master
+keycloak.resource=admin-cli
+keycloak.auth-server-url=http://localhost:8100/auth
+keycloak.ssl-required=external
+keycloak.use-resource-role-mappings=true
+
+app.keycloak.login.url=http://localhost:8100/auth/realms/demo/protocol/openid-connect/token
+app.keycloak.grant-type=password
+app.keycloak.client-id = ${keycloak.resource}
+app.keycloak.client-secret=CtjOvPRSmVZSPqN2ZUV6jlRJs35SQBMb
+

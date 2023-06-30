@@ -1,0 +1,52 @@
+variables:
+  APP_VERSION: $CI_PIPELINE_IID
+  REPOSITORY_NAME: digitalmoney-repo-dev
+  TEAM: grupo5
+  LOCK: deployment
+  APP_NAME: digitalmoney-dev
+
+stages:
+  - provision
+
+trigger-mails-pipeline-job:
+  stage: provision
+  trigger:
+    include: microservices/ms-mails/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+      - microservices/ms-mails/**/**
+    - when: on_success
+
+trigger-accounts-pipeline-job:
+  stage: provision
+  trigger:
+    include: microservices/ms-accounts/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+      - microservices/ms-accounts/**/**
+    - when: on_success
+
+trigger-users-pipeline-job:
+  stage: provision
+  trigger:
+    include: microservices/ms-users/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+      - microservices/ms-users/**/**
+    - when: always
+
+trigger-gateway-pipeline-job:
+  stage: provision
+  trigger:
+    include: microservices/gateway/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+      - microservices/gateway/**/**
+    - when: on_success
+
+
+

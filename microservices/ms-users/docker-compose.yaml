@@ -1,0 +1,27 @@
+version: '3'
+services:
+  ms-users:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${IMAGE}
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://users_db:3306/users
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_RESOURCE: user-app
+      KEYCLOAK_CREDENTIALS_SECRET: ${KEYCLOAK_SECRET}
+      KEYCLOAK_USERNAME: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      SPRING_PROFILES_ACTIVE: prod
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+    networks:
+      - ms-users
+    depends_on:
+      - users_db
+      - keycloak
+networks:
+  ms-users:
+    driver: bridge

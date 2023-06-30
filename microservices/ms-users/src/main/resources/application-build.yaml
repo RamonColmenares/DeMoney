@@ -1,0 +1,38 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:testdb}
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  cloud:
+    openfeign:
+      client:
+        config:
+          ms-accounts.url: ${MS_ACCOUNTS_DNS:http://localhost:8082}
+          ms-mails.url: ${MS_MAILS_DNS:http://localhost:8083}
+
+
+keycloak:
+  url:
+  auth-server-url: localhost:8080
+  realm: master
+  resource:
+  username:
+  password:
+
+app:
+  keycloak:
+    client-id:
+    client-secret:
+    login:
+      url:
+
+
+logging:
+  level:
+    com:
+      digitalmoney=DEBUG:
