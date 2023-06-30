@@ -9,7 +9,7 @@ public record TransactionResponseDTO (Long accountId,
                                       BigDecimal transactionAmount,
                                       LocalDateTime transactionDate,
                                       String transactionDescription,
-                                      String destinationCvu,
+                                      String destination,
                                       Long transactionId,
                                       String originCvu,
                                       Transaction.TransactionType transactionType

@@ -333,7 +333,7 @@ public class TransactionService {
             contentStream.newLine();
 
             contentStream.setFont(PDType1Font.HELVETICA, 16);
-            contentStream.showText("CBU/CVU: " + transaction.getDestinationCvu());
+            contentStream.showText("CBU/CVU: " + transaction.getDestination());
             contentStream.endText();
         } else if (transaction.getTransactionType().equals(Transaction.TransactionType.income)){
             contentStream.beginText();
@@ -346,7 +346,7 @@ public class TransactionService {
             contentStream.newLine();
 
             contentStream.setFont(PDType1Font.HELVETICA, 16);
-            contentStream.showText("CVU: " + transaction.getDestinationCvu());
+            contentStream.showText("CVU: " + transaction.getDestination());
             contentStream.endText();
         }
 
