@@ -203,7 +203,11 @@ public class TransactionService {
             throw new GoneException("Insufficient funds.");
         }
 
-        if(!(transferenceRequest.destination().matches("\\d{22}") || transferenceRequest.destination().matches("^[a-z]{6,22}\\.[a-z]{6,22}\\.[a-z]{6,22}$") || transferenceRequest.destination().matches("^[a-zA-Z0-9.-]{6,20}$"))) {
+        if(transferenceRequest.destination().matches("^\\d+$")) {
+            if(transferenceRequest.destination().length() != 22) {
+                throw new BadRequestException("Invalid destination account.");
+            }
+        } else if(!(transferenceRequest.destination().matches("^[a-z]{6,22}\\.[a-z]{6,22}\\.[a-z]{6,22}$") || transferenceRequest.destination().matches("^[A-Za-z0-9.-]{6,20}$"))) {
             throw new BadRequestException("Invalid destination account.");
         }
 
