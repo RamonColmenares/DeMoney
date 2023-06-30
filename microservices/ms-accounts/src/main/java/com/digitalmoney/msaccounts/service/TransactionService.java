@@ -1,6 +1,5 @@
 package com.digitalmoney.msaccounts.service;
 
-<<<<<<< microservices/ms-accounts/src/main/java/com/digitalmoney/msaccounts/service/TransactionService.java
 import com.digitalmoney.msaccounts.application.dto.*;
 import com.digitalmoney.msaccounts.application.exception.BadRequestException;
 import com.digitalmoney.msaccounts.application.exception.InternalServerException;
@@ -50,7 +49,6 @@ import java.math.BigDecimal;
 public class TransactionService {
     private final TransactionRepository repository;
     private final UserFeignService userFeignService;
-    private final AccountRepository accountRepository;
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final ObjectMapper mapper;
@@ -158,27 +156,27 @@ public class TransactionService {
         Optional<Account> account = accountRepository.findById(accountId);
         try {
 
-            List<Transaction> resultQuery = repository.findByAccountIdAndDestinationCvuNotAndTransactionTypeNotOrderByTransactionDateDesc(accountId, account.get().getCvu(), Transaction.TransactionType.income);
+            List<Transaction> resultQuery = repository.findByAccountIdAndDestinationNotAndTransactionTypeNotOrderByTransactionDateDesc(accountId, account.get().getCvu(), Transaction.TransactionType.income);
             Set<String> addedCvus = new HashSet<>();
 
             System.out.println(resultQuery.toString());
 
             for (Transaction accountResponse: resultQuery){
                 System.out.println(accountResponse.toString());
-                if (addedCvus.contains(accountResponse.getDestinationCvu())){
+                if (addedCvus.contains(accountResponse.getDestination())){
                     continue;
                 } else {
-                    addedCvus.add(accountResponse.getDestinationCvu());
+                    addedCvus.add(accountResponse.getDestination());
                 }
-                Optional<Account> account1 = accountRepository.findByCvu(accountResponse.getDestinationCvu());
+                Optional<Account> account1 = accountRepository.findByCvu(accountResponse.getDestination());
                 System.out.println(account1.toString());
 
                 System.out.println("get user");
                 if (account1.isPresent()){
                     UserDTO userDTO = userFeignService.findUserById(account1.get().getUserId().toString()).getBody();
-                    result.add(new TransferredAccountsResponseDTO(userDTO.name(), userDTO.last_name(), accountResponse.getDestinationCvu(), accountResponse.getTransactionDate()));
+                    result.add(new TransferredAccountsResponseDTO(userDTO.name(), userDTO.last_name(), accountResponse.getDestination(), accountResponse.getTransactionDate()));
                 } else {
-                    result.add(new TransferredAccountsResponseDTO("","", accountResponse.getDestinationCvu(), accountResponse.getTransactionDate()));
+                    result.add(new TransferredAccountsResponseDTO("","", accountResponse.getDestination(), accountResponse.getTransactionDate()));
                 }
 
                 if (addedCvus.size() > 4){

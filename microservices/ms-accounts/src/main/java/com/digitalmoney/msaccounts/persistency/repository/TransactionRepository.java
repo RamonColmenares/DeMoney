@@ -16,6 +16,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findAll(Specification<Transaction> specification, Pageable pageable);
 
-    List<Transaction> findByAccountIdAndDestinationCvuNotAndTransactionTypeNotOrderByTransactionDateDesc (@Param("accountId") Long accountId, @Param("cvu") String cvu, @Param("transactionType")Transaction.TransactionType transactionType);
+    List<Transaction> findByAccountIdAndDestinationNotAndTransactionTypeNotOrderByTransactionDateDesc (@Param("accountId") Long accountId, @Param("cvu") String cvu, @Param("transactionType")Transaction.TransactionType transactionType);
 
 }
