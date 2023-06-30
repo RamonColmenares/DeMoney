@@ -1,5 +1,7 @@
 # Equipo 05
 
+### Documento Final de Proyecto Integrador https://docs.google.com/presentation/d/1O4wx8-5PNx_zGAEQsQy6awoagTIe50FJ/edit?pli=1#slide=id.g255c89f2594_0_237
+
 ## Testing
 Dejamos a disposición el link a la carpeta de Drive donde se encontrarán todos los archivos relacionados al testing como son:
 - Plan de testing / Kick Off
